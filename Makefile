@@ -37,7 +37,7 @@ env:                                ## Print current env
 	env | sort
 
 run:                                ## Run in local Docker container
-	$(run)
+	$(dc) up
 
 clean:                              ## Clean docker stuff
 	$(dc) down -v --remove-orphans
