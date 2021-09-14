@@ -47,3 +47,6 @@ build: export BUILD_REVISION=$(build_revision)
 build: export BUILD_VERSION=$(build_version)
 build:                              ## Build docker image
 	$(dc) build
+
+test:                               ## Run all automated tests
+	$(pytest)
