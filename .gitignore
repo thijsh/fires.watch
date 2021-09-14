@@ -282,4 +282,5 @@ fires_watch/media/
 .env
 
 .envs/*
+!.envs/.docker
 

@@ -4,7 +4,7 @@
 # VERSION = 2021.09.14
 .PHONY: help test init
 
-dc = docker-compose -f local.yml
+dc = docker-compose -f docker.yml
 run = $(dc) run --rm django
 manage = $(run) python manage.py
 pytest = $(run) pytest $(ARGS)
