@@ -1,0 +1,124 @@
+        {% load static i18n %}
+
+        <!-- Navbar -->
+        <header class="navbar navbar-expand-lg navbar-light bg-light navbar-shadow">
+            <div class="container px-0 px-xl-3">
+                {# Add brand here, uncomment following lines #}
+                {% comment %}
+                <a class="navbar-brand order-lg-1 me-0 pe-lg-2 me-lg-4" href="#">
+                    <img class="d-none d-lg-block" width="153" src="path-to-dsktop-logo" alt="Around" />
+                    <img class="d-lg-none" width="58" src="path-to-mobile-logo" alt="Around" />
+                </a>
+                {% endcomment %}
+                <div class="d-flex align-items-center order-lg-3">
+                    <button class="navbar-toggler me-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapseMainMenu">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    {% if request.user.is_authenticated %}
+                    <div class="navbar-tool dropdown">
+                        <a class="navbar-tool-icon-box" href="#">
+                            <img class="navbar-tool-icon-box-img" src="{% static 'images/avatar.svg' %}" alt="Avatar" />
+                        </a>
+                        <a class="navbar-tool-label dropdown-toggle" href="#">
+                            <small>Hello,</small>{{ request.user.username|capfirst }}</a>
+                        <ul class="dropdown-menu dropdown-menu-end" style="width: 15rem;">
+                            {% if request.user.is_superuser %}
+                            <li>
+                                <a class="dropdown-item d-flex align-items-center" href="{% url 'admin:index' %}">
+                                    <i class="ai-key fs-base opacity-60 me-2"></i>
+                                    Django Admin
+                                </a>
+                            </li>
+                            <li class="dropdown-divider"></li>
+                            {% endif %}
+                            <li>
+                                <a class="dropdown-item d-flex align-items-center" href="{% url 'users:detail' request.user.username  %}">
+                                    <i class="ai-user fs-base opacity-60 me-2"></i>
+                                    Profile
+                                </a>
+                            </li>
+                            <li class="dropdown-divider"></li>
+                            <li>
+                                <a class="dropdown-item d-flex align-items-center disabled" href="#">
+                                    <i class="ai-dollar-sign fs-base opacity-60 me-2"></i>
+                                    Portfolio
+                                    <span class="ms-auto fs-xs text-muted">$735.00</span>
+                                </a>
+                            </li>
+                            <li class="dropdown-divider"></li>
+                            <li>
+                                <a class="dropdown-item d-flex align-items-center disabled" href="#">
+                                    <i class="ai-message-square fs-base opacity-60 me-2"></i>
+                                    Messages
+                                    <span class="nav-indicator"></span>
+                                    <span class="ms-auto fs-xs text-muted">1</span>
+                                </a>
+                            </li>
+                            <li class="dropdown-divider"></li>
+                            <li>
+                                <a class="dropdown-item d-flex align-items-center disabled" href="#">
+                                    <i class="ai-users fs-base opacity-60 me-2"></i>
+                                    Calculator
+                                    <span class="ms-auto fs-xs text-muted">146</span>
+                                </a>
+                            </li>
+                            <li class="dropdown-divider"></li>
+                            <li>
+                                <a class="dropdown-item d-flex align-items-center disabled" href="#">
+                                    <i class="ai-star fs-base opacity-60 me-2"></i>
+                                    Stock
+                                    <span class="ms-auto fs-xs text-muted">15</span>
+                                </a>
+                            </li>
+                            <li class="dropdown-divider"></li>
+                            <li>
+                                <a class="dropdown-item d-flex align-items-center disabled" href="#">
+                                    <i class="ai-heart fs-base opacity-60 me-2"></i>
+                                    Favorites
+                                    <span class="ms-auto fs-xs text-muted">6</span>
+                                </a>
+                            </li>
+                            <li class="dropdown-divider"></li>
+                            <li>
+                                <a class="dropdown-item d-flex align-items-center" href="{% url 'account_logout' %}">
+                                    <i class="ai-log-out fs-base opacity-60 me-2"></i>
+                                    Sign out
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    {% else %}
+                    <a class="btn btn-primary d-none d-sm-inline-block ms-3" href="{% url 'account_signup' %}">Sign up</a>
+                    <a class="btn btn-primary d-none d-sm-inline-block ms-3" href="{% url 'account_login' %}">Log in</a>
+                    {% endif %}
+                </div>
+                <div class="collapse navbar-collapse order-lg-2" id="navbarCollapseMainMenu">
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item active"><a class="nav-link" href="{% url 'home' %}">Home</a></li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle disabled" href="#" data-bs-toggle="dropdown">Dropdown</a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a class="dropdown-item disabled" href="#">Action link</a>
+                                </li>
+                                <li class="dropdown">
+                                    <a class="dropdown-item dropdown-toggle disabled" href="#" data-bs-toggle="dropdown">Dropdown</a>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item disabled" href="#">Action link</a></li>
+                                        <li><a class="dropdown-item disabled" href="#">Another action</a></li>
+                                        <li><a class="dropdown-item disabled" href="#">Something else here</a></li>
+                                        <li><a class="dropdown-item disabled" href="#">Yet another link</a></li>
+                                    </ul>
+                                </li>
+                                <li><a class="dropdown-item disabled" href="#">Another action</a></li>
+                                <li class="dropdown-divider"></li>
+                                <li><a class="dropdown-item disabled" href="#">Something else here</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </header>
