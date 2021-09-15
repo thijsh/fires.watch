@@ -9,10 +9,6 @@ run = $(dc) run --rm django
 manage = $(run) python manage.py
 pytest = $(run) pytest $(ARGS)
 
-build_version := $(shell git describe --tags --exact-match 2> /dev/null || git symbolic-ref -q --short HEAD)
-build_revision := $(shell git rev-parse --short HEAD)
-build_date := $(shell date --iso-8601=seconds)
-
 init: clean build migrate run       ## Init clean
 
 help:                               ## Show this help.
@@ -37,14 +33,11 @@ env:                                ## Print current env
 	env | sort
 
 run:                                ## Run in local Docker container
-	$(run)
+	$(dc) up
 
 clean:                              ## Clean docker stuff
 	$(dc) down -v --remove-orphans
 
-build: export BUILD_DATE=$(build_date)
-build: export BUILD_REVISION=$(build_revision)
-build: export BUILD_VERSION=$(build_version)
 build:                              ## Build docker image
 	$(dc) build
 
