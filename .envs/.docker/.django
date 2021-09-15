@@ -2,5 +2,4 @@
 # ------------------------------------------------------------------------------
 USE_DOCKER=yes
 IPYTHONDIR=/app/.ipython
-SECRET_KEY=superserial
 DEBUG=True
