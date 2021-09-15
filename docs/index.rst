@@ -12,6 +12,7 @@ Welcome to FIRES.watch's documentation!
 
    howto
    users
+   deploy
 
 
 

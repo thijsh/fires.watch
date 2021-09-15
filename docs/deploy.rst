@@ -1,0 +1,65 @@
+ .. deploy:
+
+Deploy
+======================================================================
+
+Heroku
+----------------------------------------------------------------------
+
+**Regarding the commands below, note that**:
+
+- You will have to change some values (name, region) below depending on your desired environment
+- The AWS credentials need to be provided by you
+- You will need the Heroku CLI tool locally installed for these commands to work (and log in with it)
+- A 'dyno' is Heroku's version of a container
+
+**You'll need the following commands at minimum**::
+
+    # First, let's create a Heroku app with the first command.
+    #
+    # Note (and change if needed):
+    # - The region flag
+    # - The app name flag (-n)
+    # Consider:
+    # - Adding this newly created app to a pipeline (command not included here)
+    heroku apps:create --region eu --buildpack heroku/python -n fires-watch-staging 
+
+    # Create a postgres database, and set schedule backups
+    heroku addons:create -a fires-watch-staging heroku-postgresql:hobby-dev
+
+    # Heroku will now understand that DATABASE_URL refers to the newly created postgres db.
+
+    # On Windows use double quotes for the time zone, e.g.
+    # heroku pg:backups schedule --at "02:00 America/Los_Angeles" DATABASE_URL
+    heroku pg:backups -a fires-watch-staging schedule --at '02:00 Europe/Amsterdam' DATABASE_URL
+    heroku pg:promote -a fires-watch-staging DATABASE_URL
+
+    # Create a Redis dyno
+    heroku addons:create heroku-redis:hobby-dev
+
+    # Create a mailgun dyno
+    heroku addons:create mailgun:starter
+
+    # Set some default values
+    heroku config:set -a fires-watch-staging PYTHONHASHSEED=random
+
+    heroku config:set -a fires-watch-staging WEB_CONCURRENCY=4
+
+    heroku config:set -a fires-watch-staging DJANGO_DEBUG=False
+    heroku config:set -a fires-watch-staging DJANGO_SETTINGS_MODULE=fires_watch.settings
+    heroku config:set -a fires-watch-staging DJANGO_SECRET_KEY="$(openssl rand -base64 64)"
+
+    # Generating a 32 character-long random string without any of the visually similar characters "IOl01":
+    heroku config:set -a fires-watch-staging DJANGO_ADMIN_URL="$(openssl rand -base64 4096 | tr -dc 'A-HJ-NP-Za-km-z2-9' | head -c 32)/"
+
+    # Set this to your Heroku app url, e.g. 'bionic-beaver-28392.herokuapp.com'
+    heroku config:set -a fires-watch-staging DJANGO_ALLOWED_HOSTS=fires-watch-staging.herokuapp.com,fires.watch
+
+    # Assign with AWS_ACCESS_KEY_ID
+    heroku config:set -a fires-watch-staging DJANGO_AWS_ACCESS_KEY_ID=XXXXXXXXXXXX
+
+    # Assign with AWS_SECRET_ACCESS_KEY
+    heroku config:set -a fires-watch-staging DJANGO_AWS_SECRET_ACCESS_KEY=YYYYYYYYYYYYY
+
+    # Assign with AWS_STORAGE_BUCKET_NAME
+    heroku config:set -a fires-watch-staging DJANGO_AWS_STORAGE_BUCKET_NAME=ZZZZZZZZZZZZZZ

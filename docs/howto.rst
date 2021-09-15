@@ -13,7 +13,9 @@ To build and serve docs, use the commands::
 
 
 
-Changes to files in `docs/_source` will be picked up and reloaded automatically.
+Changes to files in `docs/_sources` will be picked up and reloaded automatically.
+
+To regenerate the Table of Contents (left) on a page, remove it from the `_sources` folder so it is completely rebuilt.
 
 `Sphinx <https://www.sphinx-doc.org/>`_ is the tool used to build documentation.
 
