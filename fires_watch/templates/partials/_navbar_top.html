@@ -29,7 +29,14 @@
                                     Django Admin
                                 </a>
                             </li>
+                            <li class="dropdown-divider"></li>
                             {% endif %}
+                            <li>
+                                <a class="dropdown-item d-flex align-items-center" href="{% url 'users:detail' request.user.username  %}">
+                                    <i class="ai-user fs-base opacity-60 me-2"></i>
+                                    Profile
+                                </a>
+                            </li>
                             <li class="dropdown-divider"></li>
                             <li>
                                 <a class="dropdown-item d-flex align-items-center disabled" href="#">
@@ -80,6 +87,9 @@
                             </li>
                         </ul>
                     </div>
+                    {% else %}
+                    <a class="btn btn-primary d-none d-sm-inline-block ms-3" href="{% url 'account_signup' %}">Sign up</a>
+                    <a class="btn btn-primary d-none d-sm-inline-block ms-3" href="{% url 'account_login' %}">Log in</a>
                     {% endif %}
                 </div>
                 <div class="collapse navbar-collapse order-lg-2" id="navbarCollapseMainMenu">
