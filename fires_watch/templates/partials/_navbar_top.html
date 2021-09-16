@@ -10,7 +10,7 @@
                     <img class="d-lg-none" width="58" src="path-to-mobile-logo" alt="Around" />
                 </a>
                 {% endcomment %}
-                <div class="d-flex align-items-center order-lg-3">
+                <div class="d-flex order-lg-3">
                     <button class="navbar-toggler me-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapseMainMenu">
                         <span class="navbar-toggler-icon"></span>
                     </button>
@@ -20,7 +20,9 @@
                             <img class="navbar-tool-icon-box-img" src="{% static 'images/avatar.svg' %}" alt="Avatar" />
                         </a>
                         <a class="navbar-tool-label dropdown-toggle" href="#">
-                            <small>Hello,</small>{{ request.user.username|capfirst }}</a>
+                            <small>Hello,</small>
+                            {{ request.user.username|capfirst }}
+                        </a>
                         <ul class="dropdown-menu dropdown-menu-end" style="width: 15rem;">
                             {% if request.user.is_superuser %}
                             <li>
@@ -59,7 +61,6 @@
                                 <a class="dropdown-item d-flex align-items-center disabled" href="#">
                                     <i class="ai-users fs-base opacity-60 me-2"></i>
                                     Calculator
-                                    <span class="ms-auto fs-xs text-muted">146</span>
                                 </a>
                             </li>
                             <li class="dropdown-divider"></li>
@@ -87,11 +88,16 @@
                             </li>
                         </ul>
                     </div>
-                    {% else %}
-                    <a class="btn btn-primary d-none d-sm-inline-block ms-3" href="{% url 'account_signup' %}">Sign up</a>
-                    <a class="btn btn-primary d-none d-sm-inline-block ms-3" href="{% url 'account_login' %}">Log in</a>
                     {% endif %}
-                </div>
+                </div> <!-- /.d-flex -->
+
+                {% if not request.user.is_authenticated %}
+                <div class="d-flex order-lg-3">
+                    <a class="btn btn-primary d-none d-sm-inline-block ms-3" href="{% url 'account_signup' %}">Sign up</a>
+                    <a class="btn btn-primary ms-3" href="{% url 'account_login' %}">Log in</a>
+                </div> <!-- /.d-flex -->
+                {% endif %}
+
                 <div class="collapse navbar-collapse order-lg-2" id="navbarCollapseMainMenu">
                     <ul class="navbar-nav me-auto">
                         <li class="nav-item active"><a class="nav-link" href="{% url 'home' %}">Home</a></li>
@@ -119,6 +125,8 @@
                             <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
                         </li>
                     </ul>
-                </div>
-            </div>
+                </div> <!-- /.collapse #navbarCollapseMainMenu -->
+
+            </div> <!-- /.container -->
+
         </header>
