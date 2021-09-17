@@ -11,14 +11,14 @@ class TestFires:
             "birth_year": 1984,
             "years_duration": 30,
             "currency": "EUR",
-            "income_gross": 50000,
-            "expenses": 25000,
+            "income_gross_per_year": 50000,
+            "expenses_per_year": 25000,
             "portfolio_value": 100000,
-            "portfolio_percentage": 10,
-            "inflation_percentage": 2,
+            "portfolio_percentage_per_year": 10,
+            "inflation_percentage_per_year": 2,
         }
         expected_response = payload | {
-            "pension_months": 12 * 12,
+            "pension_months": 134,
         }
         response = admin_client.post(url, payload)
         assert response.status_code == 200
@@ -31,11 +31,11 @@ class TestFires:
             ("birth_year", 0),
             ("years_duration", 0),
             ("currency", "aaaaa"),
-            ("income_gross", 0),
-            ("expenses", 0),
+            ("income_gross_per_year", 0),
+            ("expenses_per_year", 0),
             ("portfolio_value", 0),
-            ("portfolio_percentage", 0),
-            ("inflation_percentage", 0),
+            ("portfolio_percentage_per_year", 0),
+            ("inflation_percentage_per_year", 0),
         ],
     )
     def test_calculate_invalid_data(self, variable, invalid_value, admin_client):
@@ -44,11 +44,11 @@ class TestFires:
             "birth_year": 0,
             "years_duration": 0,
             "currency": "EUR",
-            "income_gross": 0,
-            "expenses": 0,
+            "income_gross_per_year": 0,
+            "expenses_per_year": 0,
             "portfolio_value": 0,
-            "portfolio_percentage": -101,
-            "inflation_percentage": -101,
+            "portfolio_percentage_per_year": -101,
+            "inflation_percentage_per_year": -101,
         }
         payload[variable] = invalid_value
         response = admin_client.post(url, payload)
