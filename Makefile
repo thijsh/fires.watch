@@ -43,3 +43,6 @@ build:                              ## Build docker image
 
 test:                               ## Run all automated tests
 	$(pytest)
+
+status:                             ## Show container status
+	$(dc) ps
