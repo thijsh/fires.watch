@@ -7,14 +7,11 @@ from fires_watch.fires.api.serializers import FiresCalculateSerializer
 
 
 class FiresViewSet(GenericViewSet):
-    # queryset = User.objects.all()
-
     @action(detail=False, methods=["POST"])
     def calculate(self, request):
         serializer = FiresCalculateSerializer(
             context={"request": request}, data=request.data
         )
-        # breakpoint()
         if serializer.is_valid():
             return Response(status=status.HTTP_200_OK, data=serializer.data)
         else:
