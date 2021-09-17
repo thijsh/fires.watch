@@ -18,7 +18,11 @@ class TestFires:
             "inflation_percentage_per_year": 2,
         }
         expected_response = payload | {
-            "pension_months": 134,
+            "fires_calculate_result": {
+                "months": 134,
+                "age": 48,
+                "portfolio": 785963,
+            }
         }
         response = admin_client.post(url, payload)
         assert response.status_code == 200

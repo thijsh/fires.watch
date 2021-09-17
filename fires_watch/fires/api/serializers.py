@@ -1,4 +1,4 @@
-# import datetime
+import datetime
 
 from rest_framework import serializers
 
@@ -20,7 +20,7 @@ class FiresCalculateSerializer(serializers.Serializer):
     Output to user:
     Retirement age / duration
     Inflation adjusted result (i.e. 10k 50 years ago is 100k now)
-        Rows for graph representation per month
+        TODO: Rows of data for graph representation per month
     """
 
     # Required input (all values per year)
@@ -38,9 +38,9 @@ class FiresCalculateSerializer(serializers.Serializer):
     )
 
     # Calculated output
-    pension_months = serializers.SerializerMethodField()
+    fires_calculate_result = serializers.SerializerMethodField()
 
-    def get_pension_months(self, inst):
+    def get_fires_calculate_result(self, inst):
         return self.calculate_fire(inst)
 
     def calculate_fire(self, data):
@@ -51,7 +51,7 @@ class FiresCalculateSerializer(serializers.Serializer):
         - subtract inflation percentage = yearly percentage back calculated to month
         If 4% / 12 of portfolio > expenses_per_year = pension start year / month
         """
-        # current_year = datetime.date.today().year
+        current_year = datetime.date.today().year
         portfolio = data["portfolio_value"]
         expenses_per_month = data["expenses_per_year"] / 12
         savings_per_month = data["income_gross_per_year"] / 12 - expenses_per_month
@@ -65,4 +65,8 @@ class FiresCalculateSerializer(serializers.Serializer):
             needed_portfolio = expenses_per_month * 12 / safe_rate_per_year
             months += 1
             if portfolio > needed_portfolio:
-                return months
+                return {
+                    "months": months,
+                    "age": current_year - data["birth_year"] + months // 12,
+                    "portfolio": round(portfolio),
+                }
