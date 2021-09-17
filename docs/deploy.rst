@@ -6,10 +6,15 @@ Deploy
 Heroku
 ----------------------------------------------------------------------
 
+**You can add a default Heroku app name to your environment with**:: 
+
+    export HEROKU_APP=fires-watch-staging
+
+
 **Regarding the commands below, note that**:
 
 - You will have to change some values (name, region) below depending on your desired environment
-- The AWS credentials need to be provided by you
+- The AWS (and optional Mailgun) credentials need to be provided by you
 - You will need the Heroku CLI tool locally installed for these commands to work (and log in with it)
 - A 'dyno' is Heroku's version of a container
 
@@ -35,10 +40,7 @@ Heroku
     heroku pg:promote -a fires-watch-staging DATABASE_URL
 
     # Create a Redis dyno
-    heroku addons:create heroku-redis:hobby-dev
-
-    # Create a mailgun dyno
-    heroku addons:create mailgun:starter
+    heroku addons:create -a fires-watch-staging heroku-redis:hobby-dev
 
     # Set some default values
     heroku config:set -a fires-watch-staging PYTHONHASHSEED=random
@@ -46,7 +48,7 @@ Heroku
     heroku config:set -a fires-watch-staging WEB_CONCURRENCY=4
 
     heroku config:set -a fires-watch-staging DJANGO_DEBUG=False
-    heroku config:set -a fires-watch-staging DJANGO_SETTINGS_MODULE=fires_watch.settings
+    heroku config:set -a fires-watch-staging DJANGO_SETTINGS_MODULE=config.settings.production
     heroku config:set -a fires-watch-staging DJANGO_SECRET_KEY="$(openssl rand -base64 64)"
 
     # Generating a 32 character-long random string without any of the visually similar characters "IOl01":
@@ -63,3 +65,13 @@ Heroku
 
     # Assign with AWS_STORAGE_BUCKET_NAME
     heroku config:set -a fires-watch-staging DJANGO_AWS_STORAGE_BUCKET_NAME=ZZZZZZZZZZZZZZ
+
+    # Mailgun
+    #
+    # Option 1) Create a mailgun dyno (ignore next line if going for option 2)
+    heroku addons:create mailgun:starter
+    # Option 2) Use your own mailgun environment (uncomment following lines if going for option 2 here)
+    #heroku config:set -a fires-watch-staging MAILGUN_API_KEY=replace-with-your-API-key
+    #heroku config:set -a fires-watch-staging MAILGUN_API_URL=https://api.eu.mailgun.net/v3 # Note this points to the EU region, use https://api.mailgun.net/v3 for US
+    #heroku config:set -a fires-watch-staging MAILGUN_DOMAIN=your.mailgun.domain
+    #heroku config:set -a fires-watch-staging MAILGUN_PUBLIC_KEY=replace-with-your-mailgun-public-key
