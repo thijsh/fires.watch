@@ -46,3 +46,6 @@ test:                               ## Run all automated tests
 
 status:                             ## Show container status
 	$(dc) ps
+
+run-command:                        ## Run a manage.py command
+	$(manage) $(ARGS)
