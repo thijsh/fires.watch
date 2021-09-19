@@ -41,42 +41,9 @@
                             </li>
                             <li class="dropdown-divider"></li>
                             <li>
-                                <a class="dropdown-item d-flex align-items-center disabled" href="#">
-                                    <i class="ai-dollar-sign fs-base opacity-60 me-2"></i>
-                                    Portfolio
-                                    <span class="ms-auto fs-xs text-muted">$735.00</span>
-                                </a>
-                            </li>
-                            <li class="dropdown-divider"></li>
-                            <li>
-                                <a class="dropdown-item d-flex align-items-center disabled" href="#">
-                                    <i class="ai-message-square fs-base opacity-60 me-2"></i>
-                                    Messages
-                                    <span class="nav-indicator"></span>
-                                    <span class="ms-auto fs-xs text-muted">1</span>
-                                </a>
-                            </li>
-                            <li class="dropdown-divider"></li>
-                            <li>
-                                <a class="dropdown-item d-flex align-items-center disabled" href="#">
+                                <a class="dropdown-item d-flex align-items-center" href="{% url 'home' %}">
                                     <i class="ai-users fs-base opacity-60 me-2"></i>
                                     Calculator
-                                </a>
-                            </li>
-                            <li class="dropdown-divider"></li>
-                            <li>
-                                <a class="dropdown-item d-flex align-items-center disabled" href="#">
-                                    <i class="ai-star fs-base opacity-60 me-2"></i>
-                                    Stock
-                                    <span class="ms-auto fs-xs text-muted">15</span>
-                                </a>
-                            </li>
-                            <li class="dropdown-divider"></li>
-                            <li>
-                                <a class="dropdown-item d-flex align-items-center disabled" href="#">
-                                    <i class="ai-heart fs-base opacity-60 me-2"></i>
-                                    Favorites
-                                    <span class="ms-auto fs-xs text-muted">6</span>
                                 </a>
                             </li>
                             <li class="dropdown-divider"></li>
@@ -102,33 +69,6 @@
                     <ul class="navbar-nav me-auto">
                         <li class="nav-item active">
                             <a class="nav-link" href="{% url 'home' %}">Home</a>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle disabled" href="#" data-bs-toggle="dropdown">Dropdown</a>
-                            <ul class="dropdown-menu">
-                                <li>
-                                    <a class="dropdown-item disabled" href="#">Action link</a>
-                                </li>
-                                <li class="dropdown">
-                                    <a class="dropdown-item dropdown-toggle disabled" href="#" data-bs-toggle="dropdown">Dropdown</a>
-                                    <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item disabled" href="#">Action link</a></li>
-                                        <li><a class="dropdown-item disabled" href="#">Another action</a></li>
-                                        <li><a class="dropdown-item disabled" href="#">Something else here</a></li>
-                                        <li><a class="dropdown-item disabled" href="#">Yet another link</a></li>
-                                    </ul>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item disabled" href="#">Another action</a>
-                                </li>
-                                <li class="dropdown-divider"></li>
-                                <li>
-                                    <a class="dropdown-item disabled" href="#">Something else here</a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
                         </li>
                         {% if request.user.is_authenticated %}
                         <li class="nav-item d-sm-none">
