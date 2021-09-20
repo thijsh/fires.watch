@@ -3,8 +3,6 @@
 
         {% block page_content %}
 
-        {% if request.user.is_authenticated %}
-
         <!-- F.I.R.E.S.calculator -->
         <div class="container mb-5">
             <div class="row">
@@ -157,14 +155,6 @@
 
             </div> <!-- /.row -->
         </div> <!-- /.container -->
-
-        {% else %}
-
-        <div class="container d-flex flex-column pt-5 mt-n6" style="flex: 1 0 auto;">
-            Please log in :)
-        </div> <!-- /.container -->
-
-        {% endif %}
 
         {% endblock page_content %}
 
