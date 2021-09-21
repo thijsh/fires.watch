@@ -22,7 +22,8 @@ function firesCalculate() {
       .then((data) => {
         const result = data["fires_calculate_result"];
         // Parse results if needed and add to page
-        document.getElementById("results-months").innerHTML = result["months"];
+        var years = Math.round(result["months"] / 12);
+        document.getElementById("results-months").innerHTML = years;
         document.getElementById("results-age").innerHTML = result["age"];
         var formatCurrency = new Intl.NumberFormat(undefined, {
           style: "currency",
