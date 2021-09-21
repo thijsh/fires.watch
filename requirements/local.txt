@@ -10,6 +10,7 @@ mypy==0.910  # https://github.com/python/mypy
 django-stubs==1.8.0  # https://github.com/typeddjango/django-stubs
 pytest==6.2.5  # https://github.com/pytest-dev/pytest
 pytest-sugar==0.9.4  # https://github.com/Frozenball/pytest-sugar
+pytest-timeout
 
 # Documentation
 # ------------------------------------------------------------------------------

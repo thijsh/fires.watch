@@ -42,7 +42,7 @@ build:                              ## Build docker image
 	$(dc) build
 
 test:                               ## Run all automated tests
-	$(pytest)
+	$(pytest) --timeout=5
 
 status:                             ## Show container status
 	$(dc) ps

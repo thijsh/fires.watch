@@ -59,14 +59,64 @@ class FiresCalculateSerializer(serializers.Serializer):
         portfolio_factor = (1 + data["portfolio_percentage_per_year"] / 100) ** (1 / 12)
         safe_rate_per_year = 0.04
         months = 0
-        while True:
+        pension_started = False
+        result = {
+            "portfolio": None,
+            "months": None,
+            "age": None,
+            "graph_months": [],
+            "graph_years": [],
+        }
+        # Run calculation for a maximum of 100 years
+        while months < 1200:
+            # Start new year count the first month of the year
+            if (months % 12) == 0:
+                year = {
+                    "portfolio": 0,
+                    "interest": 0,
+                    "change": 0,
+                }
+            months += 1
             expenses_per_month = expenses_per_month * inflation_factor
+            interest = portfolio * (portfolio_factor - 1)
             portfolio = portfolio * portfolio_factor + savings_per_month
             needed_portfolio = expenses_per_month * 12 / safe_rate_per_year
-            months += 1
-            if portfolio > needed_portfolio:
-                return {
-                    "months": months,
-                    "age": current_year - data["birth_year"] + months // 12,
-                    "portfolio": round(portfolio),
+            if portfolio > needed_portfolio and pension_started is False:
+                pension_started = True
+                result["portfolio"] = round(portfolio)
+                result["months"] = months
+                result["age"] = current_year - data["birth_year"] + months // 12
+            # Store values per month for the graph
+            month = {
+                "portfolio": portfolio,
+                "interest": interest,
+                "change": (
+                    -expenses_per_month if pension_started else savings_per_month
+                ),
+            }
+            result["graph_months"].append(
+                {
+                    "portfolio": round(month["portfolio"]),
+                    "interest": round(month["interest"]),
+                    "change": round(month["change"]),
                 }
+            )
+            # Add month values to year tally and store end of the year
+            for variable in month:
+                year[variable] += month[variable]
+            if (months % 12) == 0:
+                result["graph_years"].append(
+                    {
+                        "portfolio": round(year["portfolio"]),
+                        "interest": round(year["interest"]),
+                        "change": round(year["change"]),
+                    }
+                )
+            # Stop calculation after requested pension length
+            if (
+                pension_started
+                and months >= result["months"] + 12 * data["years_duration"]
+            ):
+                break
+
+        return result
