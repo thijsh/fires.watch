@@ -38,16 +38,19 @@ class TestFires:
         for variable in valid_payload_result:
             assert result[variable] == valid_payload_result[variable]
 
-    def test_calculate_graph(self, admin_client, valid_payload):
+    def test_calculate_graph(self, admin_client, valid_payload, valid_payload_result):
         url = reverse("api:fires-calculate")
         response = admin_client.post(url, valid_payload)
         assert response.status_code == 200
         result = response.data["fires_calculate_result"]
-        assert len(result["graph_months"]) == 494  # 1200 max
+        expected_months = (
+            valid_payload_result["months"] + valid_payload["years_duration"] * 12
+        )
+        assert len(result["graph_months"]) == expected_months  # 1200 max
         for month in result["graph_months"]:
             for variable in {"portfolio", "interest", "change"}:
                 assert month[variable] != 0
-        assert len(result["graph_years"]) == 41  # 100 max
+        assert len(result["graph_years"]) == expected_months // 12  # 100 max
         for year in result["graph_years"]:
             for variable in {"portfolio", "interest", "change"}:
                 assert year[variable] != 0
