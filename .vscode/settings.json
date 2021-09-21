@@ -1,0 +1,68 @@
+{
+  /*
+      Linting
+  */
+
+  "python.linting.enabled": true,
+  // Pylint or Flake8? Why not both :)
+  "python.linting.pylintEnabled": true,
+  "python.linting.pylintArgs": [
+    "--load-plugins=pylint_django",
+    "--django-settings-module=config.settings.local"
+  ],
+  // Flake8
+  "python.linting.flake8Enabled": true,
+
+  /*
+      Formatting
+  */
+
+  // Configure the Black code formatter
+  "python.formatting.provider": "black",
+  "python.formatting.blackArgs": [
+    // PEP8 suggests 79 characters max https://www.python.org/dev/peps/pep-0008/#id19
+    "--line-length=79",
+    "--skip-string-normalization"
+  ],
+  // Black version 20.8b1 has a bug that doesn't add a newline
+  // to the end of a file, so let's make sure
+  "files.insertFinalNewline": true,
+  // Format code on save
+  "editor.formatOnSave": true,
+  // Get rid of annoying error popup:
+  // 'Black does not support the "Format Selection" command'
+  // https://github.com/microsoft/vscode-python/issues/1883
+  "editor.formatOnPaste": false,
+
+  /* Various */
+
+  // Git commit messages shouldn't be longer than 50 characters.
+  "[git-commit]": {
+    "editor.rulers": [50]
+  },
+
+  // Editor rulers
+  // PEP8 suggests 79 characters max
+  // and 72 characters for docstrings or comments
+  // https://www.python.org/dev/peps/pep-0008/#id19
+  "[python]": {
+    "editor.rulers": [72, 80, 120]
+  },
+  "cSpell.words": [
+    "automodule",
+    "genindex",
+    "hasher",
+    "howto",
+    "maxdepth",
+    "modindex",
+    "noindex",
+    "password",
+    "pbkdf",
+    "pytest",
+    "quickstart",
+    "signin",
+    "signup",
+    "toctree"
+  ],
+  "restructuredtext.confPath": "${workspaceFolder}/docs"
+}
