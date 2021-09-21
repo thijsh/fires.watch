@@ -1,10 +1,29 @@
         {% extends "base.html" %}
         {% load static i18n %}
 
+        {% block vendor_styles %}
+        <link rel="stylesheet" href="{% static 'css/fires-calculator.css' %}">
+        {% endblock vendor_styles %}
+
+        {% block javascript %}
+
+        <!-- Resources -->
+        <!-- https://www.amcharts.com/demos/stacked-column-chart/ -->
+        <script src="https://cdn.amcharts.com/lib/4/core.js"></script>
+        <script src="https://cdn.amcharts.com/lib/4/charts.js"></script>
+        <script src="https://cdn.amcharts.com/lib/4/themes/animated.js"></script>
+
+        <!-- F.I.R.E.S. Calculator-->
+        <script src="{% static 'js/fires-calculator.js' %}" defer></script>
+        <script src="{% static 'js/fires-calculator-graph.js' %}" defer></script>
+
+        {% endblock javascript %}
+
         {% block page_content %}
 
         <!-- F.I.R.E.S.calculator -->
-        <div class="container mb-5">
+        <div class="container my-5">
+
             <div class="row">
                 <div class="col-sm-6 mx-auto mb-5">
                     <div class="card card-hover">
@@ -117,47 +136,82 @@
                     </div> <!-- /.card -->
                 </div> <!-- /.col-sm-6 -->
 
-                <div class="col-sm-6 mx-auto">
-                    <!-- Results -->
-                    <div id="results-card" class="card card-hover d-none">
-                        <div class="card-body">
+                <div id="results-pane" class="col-sm-6 d-none">
 
-                            <h5 class="card-title">Your Results</h5>
+                    <div class="row">
+                        <div class="col">
 
-                            <p class="card-text fs-sm">Submit different values and compare your results!</p>
+                            <!-- Results -->
+                            <div class="card card-hover mb-5">
+                                <div class="card-body">
 
-                            <ul class="list-unstyled mb-0">
-                                <li class="d-flex pb-3 border-bottom">
-                                    <i class="ai-clock fs-lg mt-2 mb-0 text-primary"></i>
-                                    <div class="ps-3">
-                                        <span class="fs-ms text-muted">Months</span>
-                                        <p id="results-months" class="card-text fs-sm"><i>Fill in the form to the left to display these results.</i></p>
-                                    </div>
-                                </li>
-                                <li class="d-flex pt-2 pb-3 border-bottom">
-                                    <i class="ai-award fs-lg mt-2 mb-0 text-primary"></i>
-                                    <div class="ps-3">
-                                        <span class="fs-ms text-muted">Age</span>
-                                        <p id="results-age" class="card-text fs-sm"><i>Fill in the form to the left to display these results.</i></p>
-                                    </div>
-                                </li>
-                                <li class="d-flex pt-2">
-                                    <i class="ai-star fs-lg mt-2 mb-0 text-primary"></i>
-                                    <div class="ps-3">
-                                        <span class="fs-ms text-muted">Portfolio Value</span>
-                                        <p id="results-portfolio-value" class="card-text fs-sm"><i>Fill in the form to the left to display these results.</i></p>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div> <!-- /.col-sm-6 -->
+                                    <h5 class="card-title">Your Results</h5>
+
+                                    <p class="card-text fs-sm">Submit different values and compare your results!</p>
+
+                                    <ul class="list-unstyled mb-0">
+                                        <li class="d-flex pb-3 border-bottom">
+                                            <i class="ai-clock fs-lg mt-2 mb-0 text-primary"></i>
+                                            <div class="ps-3">
+                                                <span class="fs-ms text-muted">Years until retirement</span>
+                                                <p id="results-months" class="card-text fs-sm"><i>Fill in the form to the left to display these results.</i></p>
+                                            </div>
+                                        </li>
+                                        <li class="d-flex pt-2 pb-3 border-bottom">
+                                            <i class="ai-award fs-lg mt-2 mb-0 text-primary"></i>
+                                            <div class="ps-3">
+                                                <span class="fs-ms text-muted">Retirement Age</span>
+                                                <p id="results-age" class="card-text fs-sm"><i>Fill in the form to the left to display these results.</i></p>
+                                            </div>
+                                        </li>
+                                        <li class="d-flex pt-2">
+                                            <i class="ai-star fs-lg mt-2 mb-0 text-primary"></i>
+                                            <div class="ps-3">
+                                                <span class="fs-ms text-muted">Portfolio Value when retiring</span>
+                                                <p id="results-portfolio-value" class="card-text fs-sm"><i>Fill in the form to the left to display these results.</i></p>
+                                            </div>
+                                        </li>
+                                    </ul>
+
+                                </div> <!-- /.card-body -->
+                            </div> <!-- /.card -->
+
+                        </div> <!-- /.col -->
+                    </div> <!-- /.row -->
+
+                    <div class="row mb-0">
+                        <div class="col align-self-end">
+
+                            <!-- Graph -->
+                            <div class="card card-hover">
+                                <div class="card-body">
+
+                                    <!-- https://www.amcharts.com/demos/stacked-column-chart/ -->
+                                    <div id="chartdiv"></div>
+
+                                </div> <!-- /.card-body -->
+                            </div> <!-- /.card -->
+
+                        </div> <!-- /.col -->
+                    </div> <!-- /.row -->
+
+                </div> <!-- /.col-sm-6 #result-pane -->
 
             </div> <!-- /.row -->
-        </div> <!-- /.container -->
 
-        {% endblock page_content %}
+            <div class="row my-5">
+                <div class="col-sm-6 mx-auto mb-5">
 
-        {% block fires_scripts %}
-        <script src="{% static 'js/fires-calculator.js' %}" defer></script>
-        {% endblock fires_scripts %}
+                    <!-- Graph -->
+                    <div class="card card-hover">
+                        <div class="card-body">
+                            <!-- Default testimonial -->
+                            <blockquote class="blockquote text-center">
+                                <p class="extra-large text-heading fw-medium">The best time to plant a tree was 20 years ago. The second best time is now.</p>
+                            </blockquote>
+                        </div>
+                    </div> <!-- /.row -->
+
+                </div> <!-- /.container -->
+
+                {% endblock page_content %}

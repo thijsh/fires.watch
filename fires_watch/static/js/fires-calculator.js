@@ -35,9 +35,9 @@ function firesCalculate() {
 
         // If not yet visible, make results card visible
         if (
-          document.getElementById("results-card").classList.contains("d-none")
+          document.getElementById("results-pane").classList.contains("d-none")
         ) {
-          document.getElementById("results-card").classList.remove("d-none");
+          document.getElementById("results-pane").classList.remove("d-none");
         }
 
         // Debug
