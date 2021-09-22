@@ -20,8 +20,8 @@ function generateFiresGraph(data) {
     var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
     valueAxis.title.text = "Value ->";
     valueAxis.min = 0;
+    valueAxis.renderer.labels.template.disabled = true;
     // valueAxis.renderer.inside = true;
-    // valueAxis.renderer.labels.template.disabled = true;
 
     // Create series
     function createSeries(field, name) {
