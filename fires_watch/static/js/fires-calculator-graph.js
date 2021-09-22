@@ -14,9 +14,12 @@ function generateFiresGraph(data) {
     // Create axes
     var categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
     categoryAxis.dataFields.category = "year";
-    categoryAxis.renderer.grid.template.location = 0;
+    categoryAxis.title.text = "Years from now ->";
+    categoryAxis.showOnInit = false; // Zoom in before showing results
+    // categoryAxis.renderer.grid.template.location = 0;
 
     var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+    valueAxis.title.text = "Value ->";
     // valueAxis.renderer.inside = true;
     // valueAxis.renderer.labels.template.disabled = true;
     valueAxis.min = 0;
@@ -47,11 +50,22 @@ function generateFiresGraph(data) {
       return series;
     }
 
-    createSeries("portfolio", "Portfolio");
-    createSeries("interest", "Interest");
-    createSeries("change", "Change");
+    portfolio_series = createSeries("portfolio", "Portfolio");
+    interest_series = createSeries("interest", "Interest");
+    change_series = createSeries("change", "Change");
 
     // Legend
     chart.legend = new am4charts.Legend();
+
+    // Add scrollbar
+    var scrollbar = new am4charts.XYChartScrollbar();
+    scrollbar.series.push(portfolio_series);
+
+    chart.scrollbarX = scrollbar;
+
+    // Zoom to first 30 years
+    chart.events.on("ready", function () {
+      categoryAxis.zoomToIndexes(0, 30, false, true);
+    });
   }); // end am4core.ready()
 }
