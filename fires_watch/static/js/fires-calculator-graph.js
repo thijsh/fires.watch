@@ -1,9 +1,8 @@
 function generateFiresGraph(data) {
-  //https://www.amcharts.com/demos/stacked-column-chart/
+  // https://www.amcharts.com/demos/stacked-column-chart/
   am4core.ready(function () {
-    // Themes begin
+    // Themes
     am4core.useTheme(am4themes_animated);
-    // Themes end
 
     // Create chart instance
     var chart = am4core.create("chartdiv", am4charts.XYChart);
@@ -20,9 +19,9 @@ function generateFiresGraph(data) {
 
     var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
     valueAxis.title.text = "Value ->";
+    valueAxis.min = 0;
     // valueAxis.renderer.inside = true;
     // valueAxis.renderer.labels.template.disabled = true;
-    valueAxis.min = 0;
 
     // Create series
     function createSeries(field, name) {
@@ -60,7 +59,6 @@ function generateFiresGraph(data) {
     // Add scrollbar
     var scrollbar = new am4charts.XYChartScrollbar();
     scrollbar.series.push(portfolio_series);
-
     chart.scrollbarX = scrollbar;
 
     // Responsive
@@ -77,7 +75,7 @@ function generateFiresGraph(data) {
       },
     });
 
-    // Zoom to first 30 years
+    // Zoom in to first 30 years
     chart.events.on("ready", function () {
       categoryAxis.zoomToIndexes(0, 30, false, true);
     });
