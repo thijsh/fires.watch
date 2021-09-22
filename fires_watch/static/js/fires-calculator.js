@@ -40,6 +40,9 @@ function firesCalculate() {
           document.getElementById("results-pane").classList.remove("d-none");
         }
 
+        // Generate graph
+        generateFiresGraph(result["graph_years"]);
+
         // Debug
         console.log(result);
       });
