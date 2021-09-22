@@ -63,6 +63,20 @@ function generateFiresGraph(data) {
 
     chart.scrollbarX = scrollbar;
 
+    // Responsive
+    chart.responsive.enabled = true;
+    chart.responsive.rules.push({
+      relevant: function (target) {
+        if (target.pixelWidth <= 600) {
+          return true;
+        }
+        return false;
+      },
+      state: function (target, stateId) {
+        return;
+      },
+    });
+
     // Zoom to first 30 years
     chart.events.on("ready", function () {
       categoryAxis.zoomToIndexes(0, 30, false, true);
