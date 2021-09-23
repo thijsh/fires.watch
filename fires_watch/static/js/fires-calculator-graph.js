@@ -20,7 +20,8 @@ function generateFiresGraph(data) {
     var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
     valueAxis.title.text = "Value ->";
     valueAxis.min = 0;
-    valueAxis.renderer.labels.template.disabled = true;
+
+    // valueAxis.renderer.labels.template.disabled = true;
     // valueAxis.renderer.inside = true;
 
     // Create series
@@ -39,7 +40,7 @@ function generateFiresGraph(data) {
       series.columns.template.width = am4core.percent(60);
       // series.columns.template.tooltipText =
       series.tooltipText =
-        "[bold]{name}[/]\n[font-size:14px]Year {categoryX}\n[bold]€ {valueY}[/]";
+        "[bold]{name}[/]\n[font-size:14px]Year {categoryX}\n[bold]€ {valueY.formatNumber('###,###.##')}[/]";
 
       return series;
     }
@@ -68,11 +69,14 @@ function generateFiresGraph(data) {
 
     // Guide
     // var range = valueAxis.axisRanges.create();
-    // range.value = 1000;
-    // range.endValue = 100000;
+    // range.value = 1000000;
     // range.axisFill.fill = am4core.color("#396478");
     // range.axisFill.fillOpacity = 0.2;
     // range.grid.strokeOpacity = 0;
+    // range.grid.strokeWidth = 2;
+
+    chart.numberFormatter.numberFormat = "#.a"; // Format big numbers
+    valueAxis.calculateTotals = true; // Calculate total stacked values
 
     // Responsive
     chart.responsive.enabled = true;
