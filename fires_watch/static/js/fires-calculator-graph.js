@@ -40,12 +40,6 @@ function generateFiresGraph(data) {
       series.columns.template.tooltipText =
         "[bold]{name}[/]\n[font-size:14px]Year {categoryX}\n[bold]€ {valueY}[/]";
 
-      // Add label
-      var labelBullet = series.bullets.push(new am4charts.LabelBullet());
-      labelBullet.label.text = "{valueY}";
-      labelBullet.locationY = 0.5;
-      labelBullet.label.hideOversized = true;
-
       return series;
     }
 
