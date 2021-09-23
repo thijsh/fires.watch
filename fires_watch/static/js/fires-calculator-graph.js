@@ -37,7 +37,8 @@ function generateFiresGraph(data) {
 
       // Configure columns
       series.columns.template.width = am4core.percent(60);
-      series.columns.template.tooltipText =
+      // series.columns.template.tooltipText =
+      series.tooltipText =
         "[bold]{name}[/]\n[font-size:14px]Year {categoryX}\n[bold]€ {valueY}[/]";
 
       return series;
@@ -55,6 +56,23 @@ function generateFiresGraph(data) {
     var scrollbar = new am4charts.XYChartScrollbar();
     scrollbar.series.push(portfolio_series);
     chart.scrollbarX = scrollbar;
+
+    // Cursor
+    chart.cursor = new am4charts.XYCursor();
+    // chart.cursor.lineY.disabled = true;
+    valueAxis.cursorTooltipEnabled = false;
+
+    // Disable grid labels
+    categoryAxis.renderer.grid.template.disabled = true;
+    valueAxis.renderer.grid.template.disabled = true;
+
+    // Guide
+    // var range = valueAxis.axisRanges.create();
+    // range.value = 1000;
+    // range.endValue = 100000;
+    // range.axisFill.fill = am4core.color("#396478");
+    // range.axisFill.fillOpacity = 0.2;
+    // range.grid.strokeOpacity = 0;
 
     // Responsive
     chart.responsive.enabled = true;
