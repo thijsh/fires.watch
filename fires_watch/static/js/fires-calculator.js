@@ -28,6 +28,8 @@ function firesCalculate() {
         var formatCurrency = new Intl.NumberFormat(undefined, {
           style: "currency",
           currency: "EUR",
+          minimumFractionDigits: 0,
+          maximumFractionDigits: 0,
         });
         const portfolioValue = formatCurrency.format(result["portfolio"]);
         document.getElementById("results-portfolio-value").innerHTML =
