@@ -8,6 +8,11 @@
         {% block javascript %}
 
         <!-- Resources -->
+        <!-- Around Bootstrap Theme -->
+        <script src="{% static 'js/imagesloaded.pkgd.min.js' %}"></script>
+        <script src="{% static 'js/shuffle.min.js' %}"></script>
+
+
         <!-- https://www.amcharts.com/demos/stacked-column-chart/ -->
         <script src="https://cdn.amcharts.com/lib/4/core.js"></script>
         <script src="https://cdn.amcharts.com/lib/4/charts.js"></script>
@@ -24,9 +29,10 @@
         <!-- F.I.R.E.S.calculator -->
         <div class="container my-5">
 
-            <div class="row">
-                <div class="col-sm-6 mx-auto mb-5">
-                    <div class="card card-hover">
+            <div class="row mb-5">
+                <div class="col-sm-6 mx-auto">
+
+                    <div class="card card-hover mb-5">
                         <div class="card-body">
 
                             <h5 class="card-title">Calculator</h5>
@@ -134,6 +140,7 @@
 
                         </div> <!-- /.card-body -->
                     </div> <!-- /.card -->
+
                 </div> <!-- /.col-sm-6 -->
 
                 <div id="results-pane" class="col-sm-6 d-none">
@@ -179,11 +186,11 @@
                         </div> <!-- /.col -->
                     </div> <!-- /.row -->
 
-                    <div class="row mb-0">
-                        <div class="col align-self-end">
+                    <div class="row">
+                        <div class="col">
 
                             <!-- Graph -->
-                            <div class="card card-hover">
+                            <div class="card card-hover mb-5">
                                 <div class="card-body">
 
                                     <!-- https://www.amcharts.com/demos/stacked-column-chart/ -->
@@ -199,19 +206,42 @@
 
             </div> <!-- /.row -->
 
-            <div class="row my-5">
-                <div class="col-sm-6 mx-auto mb-5">
+            <div class="row mb-5">
+                <div class="col">
 
-                    <!-- Graph -->
-                    <div class="card card-hover">
-                        <div class="card-body">
-                            <!-- Default testimonial -->
-                            <blockquote class="blockquote text-center">
-                                <p class="extra-large text-heading fw-medium">The best time to plant a tree was 20 years ago. The second best time is now.</p>
-                            </blockquote>
+                    <!-- Masonry grid: 3 columns -->
+                    <div class="masonry-grid" data-columns="2">
+
+                        <!-- Item -->
+                        <div class="masonry-grid-item">
+                            <div class="card card-hover">
+                                <div class="card-body">
+                                    <blockquote class="blockquote text-center">
+                                        <p class="extra-large text-heading fw-normal">
+                                            <i>
+                                                The best time to plant a tree was 20 years ago.<br>
+                                                The second best time is now.
+                                            </i>
+                                        </p>
+                                    </blockquote>
+                                </div>
+                            </div>
                         </div>
-                    </div> <!-- /.row -->
 
-                </div> <!-- /.container -->
+                        <!-- Item -->
+                        <div class="masonry-grid-item">
+                            <div class="card card-hover">
+                                <div class="card-body">
+                                    <h5 class="card-title">What is F.I.R.E. ?</h5>
+                                    <p class="card-text fs-sm">Financial Independence, Retire Early (FIRE) is a movement of people devoted to a program of extreme savings and investment that aims to allow them to retire far earlier than traditional budgets and retirement plans would permit.</p>
+                                    <p><span class="text-muted fs-xs"><i>By clicking on the link below you'll be redirected to an external site.</i></span></p>
+                                    <a href="https://www.investopedia.com/terms/f/financial-independence-retire-early-fire.asp" class="btn btn-sm btn-primary" target="_blank">Read more on Investopedia.com</a>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div> <!-- /.col -->
+                </div> <!-- /.row -->
 
                 {% endblock page_content %}
