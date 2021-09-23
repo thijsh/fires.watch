@@ -12,7 +12,6 @@
         <script src="{% static 'js/imagesloaded.pkgd.min.js' %}"></script>
         <script src="{% static 'js/shuffle.min.js' %}"></script>
 
-
         <!-- https://www.amcharts.com/demos/stacked-column-chart/ -->
         <script src="https://cdn.amcharts.com/lib/4/core.js"></script>
         <script src="https://cdn.amcharts.com/lib/4/charts.js"></script>
@@ -156,29 +155,48 @@
 
                                     <p class="card-text fs-sm">Submit different values and compare your results!</p>
 
-                                    <ul class="list-unstyled mb-0">
-                                        <li class="d-flex pb-3">
-                                            <i class="ai-clock fs-lg mt-2 mb-0 text-primary"></i>
-                                            <div class="ps-3">
-                                                <span class="fs-ms text-muted">Years until retirement</span>
-                                                <p id="results-months" class="card-text fs-lead">N/A</p>
-                                            </div>
-                                        </li>
-                                        <li class="d-flex pb-3">
-                                            <i class="ai-award fs-lg mt-2 mb-0 text-primary"></i>
-                                            <div class="ps-3">
-                                                <span class="fs-ms text-muted">Retirement Age</span>
-                                                <p id="results-age" class="card-text fs-lead">N/A</p>
-                                            </div>
-                                        </li>
-                                        <li class="d-flex pb-3">
-                                            <i class="ai-star fs-lg mt-2 mb-0 text-primary"></i>
-                                            <div class="ps-3">
-                                                <span class="fs-ms text-muted">Portfolio Value when retiring</span>
-                                                <p id="results-portfolio-value" class="card-text fs-lead">N/A</p>
-                                            </div>
-                                        </li>
-                                    </ul>
+                                    <div class="row">
+
+                                        <div class="col-sm-3">
+
+                                            <ul class="list-unstyled mb-0">
+                                                <li class="d-flex pb-3">
+                                                    <i class="ai-clock fs-lg mt-2 mb-0 text-primary"></i>
+                                                    <div class="ps-3 text-sm-center">
+                                                        <span class="fs-ms text-muted">Years until retirement</span>
+                                                        <p id="results-months" class="card-text fs-lead fw-bold">N/A</p>
+                                                    </div>
+                                                </li>
+                                            </ul> <!-- /.ul -->
+
+                                        </div> <!-- /.col -->
+                                        <div class="col-sm-3">
+
+                                            <ul class="list-unstyled mb-0">
+                                                <li class="d-flex pb-3">
+                                                    <i class="ai-award fs-lg mt-2 mb-0 text-primary"></i>
+                                                    <div class="ps-3 text-sm-center">
+                                                        <span class="fs-ms text-muted">Retirement Age</span>
+                                                        <p id="results-age" class="card-text fs-lead fw-bold">N/A</p>
+                                                    </div>
+                                                </li>
+                                            </ul> <!-- /.ul -->
+
+                                        </div> <!-- /.col -->
+                                        <div class="col-sm-4">
+
+                                            <ul class="list-unstyled mb-0">
+                                                <li class="d-flex pb-3">
+                                                    <i class="ai-star fs-lg mt-2 mb-0 text-primary"></i>
+                                                    <div class="ps-3 text-sm-center">
+                                                        <span class="fs-ms text-muted">Portfolio Value when retiring</span>
+                                                        <p id="results-portfolio-value" class="card-text fs-lead fw-bold">N/A</p>
+                                                    </div>
+                                                </li>
+                                            </ul> <!-- /.ul -->
+
+                                        </div> <!-- /.col -->
+                                    </div> <!-- /.row -->
 
                                 </div> <!-- /.card-body -->
                             </div> <!-- /.card -->
@@ -229,7 +247,19 @@
                     <!-- Masonry grid: 3 columns -->
                     <div class="masonry-grid" data-columns="2">
 
-                        <!-- Item -->
+                        <!-- F.I.R.E. Definition -->
+                        <div class="masonry-grid-item">
+                            <div class="card card-hover">
+                                <div class="card-body">
+                                    <h5 class="card-title">What is F.I.R.E. ?</h5>
+                                    <p class="card-text fs-sm">Financial Independence, Retire Early (FIRE) is a movement of people devoted to a program of extreme savings and investment that aims to allow them to retire far earlier than traditional budgets and retirement plans would permit.</p>
+                                    <p><span class="text-muted fs-xs"><i>By clicking on the link below you'll be redirected to an external site.</i></span></p>
+                                    <a href="https://www.investopedia.com/terms/f/financial-independence-retire-early-fire.asp" class="btn btn-sm btn-primary" target="_blank">Read more on Investopedia.com</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Inspirational Quote -->
                         <div class="masonry-grid-item">
                             <div class="card card-hover">
                                 <div class="card-body">
@@ -244,19 +274,6 @@
                                 </div>
                             </div>
                         </div>
-
-                        <!-- Item -->
-                        <div class="masonry-grid-item">
-                            <div class="card card-hover">
-                                <div class="card-body">
-                                    <h5 class="card-title">What is F.I.R.E. ?</h5>
-                                    <p class="card-text fs-sm">Financial Independence, Retire Early (FIRE) is a movement of people devoted to a program of extreme savings and investment that aims to allow them to retire far earlier than traditional budgets and retirement plans would permit.</p>
-                                    <p><span class="text-muted fs-xs"><i>By clicking on the link below you'll be redirected to an external site.</i></span></p>
-                                    <a href="https://www.investopedia.com/terms/f/financial-independence-retire-early-fire.asp" class="btn btn-sm btn-primary" target="_blank">Read more on Investopedia.com</a>
-                                </div>
-                            </div>
-                        </div>
-
 
                     </div> <!-- /.col -->
                 </div> <!-- /.row -->
