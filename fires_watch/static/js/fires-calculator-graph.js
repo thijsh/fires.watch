@@ -55,6 +55,7 @@ function generateFiresGraph(data) {
 
     // Legend
     chart.legend = new am4charts.Legend();
+    chart.legend.itemContainers.template.paddingTop = 25;
 
     // Add scrollbar
     var scrollbar = new am4charts.XYChartScrollbar();
