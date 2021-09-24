@@ -36,6 +36,9 @@ class FiresCalculateSerializer(serializers.Serializer):
     inflation_percentage_per_year = serializers.FloatField(
         min_value=-100, max_value=100
     )
+    max_withdrawal_percentage_per_year = serializers.FloatField(
+        min_value=1, max_value=10, default=4
+    )
 
     # Calculated output
     fires_calculate_result = serializers.SerializerMethodField()
@@ -57,7 +60,7 @@ class FiresCalculateSerializer(serializers.Serializer):
         savings_per_month = data["income_gross_per_year"] / 12 - expenses_per_month
         inflation_factor = (1 + data["inflation_percentage_per_year"] / 100) ** (1 / 12)
         portfolio_factor = (1 + data["portfolio_percentage_per_year"] / 100) ** (1 / 12)
-        safe_rate_per_year = 0.04
+        safe_rate_per_year = data["max_withdrawal_percentage_per_year"] / 100
         months = 0
         pension_started = False
         result = {
