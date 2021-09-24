@@ -31,9 +31,16 @@ function firesCalculate() {
           minimumFractionDigits: 0,
           maximumFractionDigits: 0,
         });
-        const portfolioValue = formatCurrency.format(result["portfolio"]);
+        const portfolioValue = formatCurrency
+          .format(result["portfolio"])
+          .replace("€", "€ ");
         document.getElementById("results-portfolio-value").innerHTML =
           portfolioValue;
+        const costOfLivingValue = formatCurrency
+          .format(result["cost_of_living"])
+          .replace("€", "€ ");
+        document.getElementById("results-cost-of-living").innerHTML =
+          costOfLivingValue;
 
         // If not yet visible, make results card visible
         if (
