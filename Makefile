@@ -9,7 +9,7 @@ run = $(dc) run --rm django
 manage = $(run) python manage.py
 pytest = $(run) pytest $(ARGS)
 
-init: clean build migrate run       ## Init clean
+init: clean build migrate           ## Init clean
 
 help:                               ## Show this help.
 	@fgrep -h "##" $(MAKEFILE_LIST) | fgrep -v fgrep | sed -e 's/\\$$//' | sed -e 's/##//'
@@ -42,7 +42,7 @@ build:                              ## Build docker image
 	$(dc) build
 
 test:                               ## Run all automated tests
-	$(pytest) --timeout=5
+	$(pytest) --timeout=5 --cov=fires_watch/fires --cov-report term --cov-fail-under=95
 
 status:                             ## Show container status
 	$(dc) ps
