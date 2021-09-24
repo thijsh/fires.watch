@@ -19,7 +19,6 @@ class Fires:
         current_year = datetime.date.today().year
         portfolio = data["portfolio_value"]
         expenses_per_month = data["expenses_per_year"] / 12
-        savings_per_month = data["income_gross_per_year"] / 12 - expenses_per_month
         inflation_factor = (1 + data["inflation_percentage_per_year"] / 100) ** (1 / 12)
         portfolio_factor = (1 + data["portfolio_percentage_per_year"] / 100) ** (1 / 12)
         safe_rate_per_year = data["max_withdrawal_percentage_per_year"] / 100
@@ -46,6 +45,9 @@ class Fires:
             months += 1
             expenses_per_month = expenses_per_month * inflation_factor
             interest = portfolio * (portfolio_factor - 1)
+            savings_per_month = max(
+                data["income_gross_per_year"] / 12 - expenses_per_month, 0
+            )
             portfolio = portfolio * portfolio_factor + savings_per_month
             needed_portfolio = expenses_per_month * 12 / safe_rate_per_year
             if portfolio > needed_portfolio and pension_started is False:
