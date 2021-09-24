@@ -152,21 +152,24 @@
                                         <span class="ai-info ml-5 fs-5"></span>
                                     </label>
                                     <div class="col-md-7">
-                                        <!-- Range input -->
-                                        <div class="mb-3">
-                                            <div class="row">
-                                                <div class="col-8">
-                                                    <input class="form-range" type="range" name="max_withdrawal_percentage_per_year" id="max_withdrawal_percentage_per_year" min="1" max="10" step="0.1" value="4" oninput="riskprofileOutput.value = max_withdrawal_percentage_per_year.value">
-                                                </div>
-                                                <div class="col-4">
-                                                    <span class="border rounded py-2 px-3">
-                                                        <output name="riskprofile-result" id="riskprofileOutput">4</output>%
-                                                    </span>
-                                                </div>
+                                        <div class="row">
+                                            <!-- Range input -->
+                                            <div class="col-5" id="range-slider-div">
+                                                <input class="form-range" type="range" name="max_withdrawal_percentage_per_year" id="max_withdrawal_percentage_per_year" size="6" min="1" max="10" step="0.1" value="4" oninput="riskprofileOutput.value = max_withdrawal_percentage_per_year.value">
                                             </div>
-                                        </div>
-                                    </div> <!-- /.col s-->
-                                </div> <!-- /. row -->
+                                            <div class="col-7">
+                                                <!-- Input group with percent icon on the right -->
+                                                <div class="input-group">
+                                                    <input type="number" class="form-control" placeholder="4" min="1" max="10" step="0.1" id="riskprofileOutput" name="riskprofile-result" oninput="max_withdrawal_percentage_per_year.value = riskprofileOutput.value">
+                                                    <span class="input-group-text">
+                                                        <i class="ai-percent"></i>
+                                                    </span>
+                                                </div> <!-- /.input-group -->
+                                            </div> <!-- /.col -->
+                                        </div> <!-- /.row -->
+                                    </div> <!-- /. col -->
+
+                                </div> <!-- /.row -->
 
                                 <!-- Privacy Statement -->
                                 <div class="row align-items-center mb-3">
