@@ -26,6 +26,7 @@ class Fires:
         months = 0
         pension_started = False
         result = {
+            "cost_of_living": None,
             "portfolio": None,
             "months": None,
             "years": None,
@@ -49,6 +50,7 @@ class Fires:
             needed_portfolio = expenses_per_month * 12 / safe_rate_per_year
             if portfolio > needed_portfolio and pension_started is False:
                 pension_started = True
+                result["cost_of_living"] = round(expenses_per_month * 12)
                 result["portfolio"] = round(portfolio)
                 result["months"] = months
                 result["years"] = months // 12

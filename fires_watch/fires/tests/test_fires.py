@@ -22,6 +22,7 @@ def valid_payload():
 @pytest.fixture
 def valid_payload_result():
     return {
+        "cost_of_living": 31187,
         "portfolio": 785963,
         "months": 134,
         "age": 48,
