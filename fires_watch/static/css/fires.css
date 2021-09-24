@@ -11,3 +11,17 @@
   background-color: #f2dede;
   border-color: #eed3d7;
 }
+
+.ai-info {
+  color: grey;
+  margin-bottom: 6px;
+}
+
+.ai-info:hover {
+  color: lightskyblue;
+  margin-bottom: 6px;
+}
+
+#riskprofile-input {
+  padding: 0;
+}
