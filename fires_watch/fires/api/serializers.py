@@ -37,7 +37,7 @@ class FiresCalculateSerializer(serializers.Serializer):
         min_value=-100, max_value=100
     )
     max_withdrawal_percentage_per_year = serializers.FloatField(
-        min_value=1, max_value=10
+        min_value=1, max_value=10, default=4
     )
 
     # Calculated output
