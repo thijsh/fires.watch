@@ -47,7 +47,7 @@ function generateFiresGraph(data) {
 
     portfolio_series = createSeries("portfolio", "Portfolio");
     interest_series = createSeries("interest", "Interest");
-    change_series = createSeries("change", "Change");
+    change_series = createSeries("change", "Transactions");
 
     // Legend
     chart.legend = new am4charts.Legend();

@@ -47,7 +47,7 @@
 
                                 <!-- Birth Year -->
                                 <div class="row align-items-center mb-5">
-                                    <label for="birthyear-input" class="col-md-5 col-form-label" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="left" data-bs-trigger="hover" title="Popover" data-bs-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus ornare sem.">
+                                    <label for="birthyear-input" class="col-md-5 col-form-label" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="left" data-bs-trigger="hover" title="Your Birth Year" data-bs-content="Your birthyear is needed to calculate your retirement age based on the parameters you set below.">
                                         Your Birth Year
                                         <span class="ai-info ml-5 fs-5"></span>
                                     </label>
@@ -59,7 +59,7 @@
 
                                 <!-- Retirement Duration In Years -->
                                 <div class="row align-items-center mb-5 d-none">
-                                    <label for="retirementduration-input" class="col-md-5 col-form-label" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="left" data-bs-trigger="hover" title="Popover" data-bs-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus ornare sem.">
+                                    <label for="retirementduration-input" class="col-md-5 col-form-label" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="left" data-bs-trigger="hover" title="Retirement Duration In Years" data-bs-content="Your estimated amount of years you want your retirement fund to last. The graph on the left will continue this many year after your calculated retirement age. A default of 30 years is recommended.">
                                         Retirement Duration In Years
                                         <span class="ai-info ml-5 fs-5"></span>
                                     </label>
@@ -71,7 +71,7 @@
 
                                 <!-- Currency -->
                                 <div class="row align-items-center mb-5 d-none">
-                                    <label for="currency-input" class="col-md-5 col-form-label" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="left" data-bs-trigger="hover" title="Popover" data-bs-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus ornare sem.">
+                                    <label for="currency-input" class="col-md-5 col-form-label" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="left" data-bs-trigger="hover" title="Currency" data-bs-content="Your preferred currency for the calculation output numbers.">
                                         Currency
                                         <span class="ai-info ml-5 fs-5"></span>
                                     </label>
@@ -86,7 +86,7 @@
 
                                 <!-- Yearly Gross Income-->
                                 <div class="row align-items-center mb-5">
-                                    <label for="grossincomeperyear-input" class="col-md-5 col-form-label" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="left" data-bs-trigger="hover" title="Popover" data-bs-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus ornare sem.">
+                                    <label for="grossincomeperyear-input" class="col-md-5 col-form-label" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="left" data-bs-trigger="hover" title="Yearly Net Income" data-bs-content="Your current yearly net income (after taxes). Your income is not automatically inflation adjusted in the calculation to err on the safe side of caution.">
                                         Yearly Net Income
                                         <span class="ai-info ml-5 fs-5"></span>
                                     </label>
@@ -98,7 +98,7 @@
 
                                 <!-- Yearly Expenses -->
                                 <div class="row align-items-center mb-5">
-                                    <label for="portfoliointerestperyear-input" class="col-md-5 col-form-label" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="left" data-bs-trigger="hover" title="Popover" data-bs-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus ornare sem.">
+                                    <label for="portfoliointerestperyear-input" class="col-md-5 col-form-label" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="left" data-bs-trigger="hover" title="Yearly Expenses" data-bs-content="Your current yearly expenses (all estimated expenses including food and recreation). Your expenses are inflation adjusted in the calculation to give a realistic estimate of retirement age. The amount you can add to your portfolio per year = income - expenses.">
                                         Yearly Expenses
                                         <span class="ai-info ml-5 fs-5"></span>
                                     </label>
@@ -110,7 +110,7 @@
 
                                 <!-- Portfolio Value -->
                                 <div class="row align-items-center mb-5">
-                                    <label for="portfoliovalue-input" class="col-md-5 col-form-label" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="left" data-bs-trigger="hover" title="Popover" data-bs-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus ornare sem.">
+                                    <label for="portfoliovalue-input" class="col-md-5 col-form-label" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="left" data-bs-trigger="hover" title="Current Portfolio Value" data-bs-content="Your current portfolio (consisting of savings, funds, and stock). Your portfolio will be grown over time with the estimated interest you enter below.">
                                         Current Portfolio Value
                                         <span class="ai-info ml-5 fs-5"></span>
                                     </label>
@@ -122,32 +122,32 @@
 
                                 <!-- Yearly Portfolio Interest -->
                                 <div class="row align-items-center mb-5">
-                                    <label for="portfoliointerestperyear-input" class="col-md-5 col-form-label" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="left" data-bs-trigger="hover" title="Popover" data-bs-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus ornare sem.">
+                                    <label for="portfoliointerestperyear-input" class="col-md-5 col-form-label" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="left" data-bs-trigger="hover" title="Yearly Portfolio Interest" data-bs-content="Estimate your future overall portfolio interest. For example: When investing in broad market ETFs a good estimate of interest is 10%.">
                                         Yearly Portfolio Interest
                                         <span class="ai-info ml-5 fs-5"></span>
                                     </label>
                                     <div class="col-md-7">
                                         <input class="form-control" type="number" id="portfoliointerestperyear-input" name="portfolio_percentage_per_year" min="-100" max="100" placeholder="10" value="10" required>
-                                        <div class="invalid-feedback">Please input your Yearly Portfolio Interest as a number between -100 and 100.</div>
+                                        <div class="invalid-feedback">Please input your Yearly Portfolio Interest as a number between -100% and 100%.</div>
                                     </div>
                                 </div> <!-- /. row -->
 
                                 <!-- Yearly Inflation Percentage -->
                                 <div class="row align-items-center mb-5">
-                                    <label for="inflationpercentageperyear-input" class="col-md-5 col-form-label" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="left" data-bs-trigger="hover" title="Popover" data-bs-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus ornare sem.">
+                                    <label for="inflationpercentageperyear-input" class="col-md-5 col-form-label" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="left" data-bs-trigger="hover" title="Yearly Inflation Percentage" data-bs-content="Estimate the future yearly inflation percentage. For example: In the EU and US inflation is expected to remain around 2% (1.5-3% range).">
                                         Yearly Inflation Percentage
                                         <span class="ai-info ml-5 fs-5"></span>
                                     </label>
                                     <div class="col-md-7">
                                         <input class="form-control" type="number" id="inflationpercentageperyear-input" name="inflation_percentage_per_year" min="-100" max="100" placeholder="2" value="2" required>
-                                        <div class="invalid-feedback">Please input your Yearly Inflation Percentage as a number between -100 and 100.</div>
+                                        <div class="invalid-feedback">Please input your Yearly Inflation Percentage as a number between -100% and 100%.</div>
                                     </div>
                                 </div> <!-- /. row -->
 
                                 <!-- Risk Profile: Range slider -->
                                 <div class="row align-items-center mb-3">
 
-                                    <label for="riskprofile-input" class="col-md-5 col-form-label" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="left" data-bs-trigger="hover" title="Popover" data-bs-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus ornare sem.">
+                                    <label for="riskprofile-input" class="col-md-5 col-form-label" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="left" data-bs-trigger="hover" title="Your Risk Profile" data-bs-content="Your risk profile is the maximum percentage of your portfolio you are planning to withdraw per year. Enter a value between 1% and 10%. Based on historic market data 3% is very safe, and 8% is very risky. The recommended default for a safe retirement portfolio is 4%.">
                                         Your Risk Profile
                                         <span class="ai-info ml-5 fs-5"></span>
                                     </label>
@@ -212,10 +212,10 @@
                                         <div class="col-sm-3">
 
                                             <ul class="list-unstyled mb-0">
-                                                <li class="d-flex pb-3">
+                                                <li class="d-flex pb-3" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="top" data-bs-trigger="hover" title="Years Until Retirement" data-bs-content="The number of years until your retirement portfolio has grown to a sufficient size that you can pay your inflation adjusted expenses and remain within your risk profile.">
                                                     <i class="ai-clock fs-lg mt-2 mb-0 text-primary"></i>
                                                     <div class="ps-3 text-sm-center">
-                                                        <span class="fs-ms text-muted">Years until retirement</span>
+                                                        <span class="fs-ms text-muted">Years Until Retirement</span>
                                                         <p id="results-months" class="card-text fs-lead fw-bold">N/A</p>
                                                     </div>
                                                 </li>
@@ -224,7 +224,7 @@
                                         </div> <!-- /.col -->
                                         <div class="col-sm-3">
 
-                                            <ul class="list-unstyled mb-0">
+                                            <ul class="list-unstyled mb-0" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="top" data-bs-trigger="hover" title="Retirement Age" data-bs-content="Your age when your can retire based on the calculated portfolio. At this moment your inflation adjusted expenses are within your risk profile.">
                                                 <li class="d-flex pb-3">
                                                     <i class="ai-award fs-lg mt-2 mb-0 text-primary"></i>
                                                     <div class="ps-3 text-sm-center">
@@ -237,11 +237,11 @@
                                         </div> <!-- /.col -->
                                         <div class="col-sm-4">
 
-                                            <ul class="list-unstyled mb-0">
+                                            <ul class="list-unstyled mb-0" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="top" data-bs-trigger="hover" title="Portfolio Value When Retiring" data-bs-content="The calculated value of your portfolio when you can retire.">
                                                 <li class="d-flex pb-3">
                                                     <i class="ai-star fs-lg mt-2 mb-0 text-primary"></i>
                                                     <div class="ps-3 text-sm-center">
-                                                        <span class="fs-ms text-muted">Portfolio Value when retiring</span>
+                                                        <span class="fs-ms text-muted">Portfolio Value When Retiring</span>
                                                         <p id="results-portfolio-value" class="card-text fs-lead fw-bold">N/A</p>
                                                     </div>
                                                 </li>
