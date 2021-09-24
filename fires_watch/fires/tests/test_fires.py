@@ -15,6 +15,7 @@ def valid_payload():
         "portfolio_value": 100000,
         "portfolio_percentage_per_year": 10,
         "inflation_percentage_per_year": 2,
+        "max_withdrawal_percentage_per_year": 4,
     }
 
 
@@ -66,6 +67,7 @@ class TestFires:
             ("portfolio_value", -1),
             ("portfolio_percentage_per_year", -101),
             ("inflation_percentage_per_year", -101),
+            ("max_withdrawal_percentage_per_year", 0),
         ],
     )
     def test_calculate_invalid_data(
@@ -78,6 +80,10 @@ class TestFires:
         assert response.status_code == 400
 
     def test_calculation_timeout_no_result(self, admin_client):
+        """
+        This test will perform a calculation that will never reach a
+        valid pension age. The future horizon limit should be 100 years.
+        """
         url = reverse("api:fires-calculate")
         payload = {
             "birth_year": 1984,
@@ -88,6 +94,7 @@ class TestFires:
             "portfolio_value": 1,
             "portfolio_percentage_per_year": 0,
             "inflation_percentage_per_year": 2,
+            "max_withdrawal_percentage_per_year": 4,
         }
         response = admin_client.post(url, payload)
         assert response.status_code == 200
