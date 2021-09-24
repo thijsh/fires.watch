@@ -18,9 +18,9 @@ class FiresCalculateSerializer(serializers.Serializer):
         Default: average historical inflation for EUR/USD
 
     Output to user:
-    Retirement age / duration
-    Inflation adjusted result (i.e. 10k 50 years ago is 100k now)
-        TODO: Rows of data for graph representation per month
+    - Retirement age / duration
+    - Inflation adjusted result (i.e. 10k 50 years ago is 100k now)
+    - Graphs per month and year
     """
 
     # Required input (all values per year)
@@ -63,6 +63,7 @@ class FiresCalculateSerializer(serializers.Serializer):
         result = {
             "portfolio": None,
             "months": None,
+            "years": None,
             "age": None,
             "graph_months": [],
             "graph_years": [],
@@ -85,6 +86,7 @@ class FiresCalculateSerializer(serializers.Serializer):
                 pension_started = True
                 result["portfolio"] = round(portfolio)
                 result["months"] = months
+                result["years"] = months // 12
                 result["age"] = current_year - data["birth_year"] + months // 12
             # Store values per month for the graph
             month = {
@@ -102,13 +104,15 @@ class FiresCalculateSerializer(serializers.Serializer):
                 }
             )
             # Add month values to year tally and store end of the year
+            # NOTE: year portfolio is added and in next step divided by
+            #       12 to get the average portfolio size during the year.
             for variable in month:
                 year[variable] += month[variable]
             if (months % 12) == 0:
                 result["graph_years"].append(
                     {
                         "year": months / 12,
-                        "portfolio": round(year["portfolio"]),
+                        "portfolio": year["portfolio"] // 12,
                         "interest": round(year["interest"]),
                         "change": round(year["change"]),
                     }
