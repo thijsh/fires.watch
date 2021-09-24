@@ -2,11 +2,15 @@
         {% load static i18n %}
 
         {% block vendor_styles %}
+        {% comment %}
+        <!-- Around Bootstrap Theme -->
+        <link rel="stylesheet" href="{% static 'css/nouislider.min.css' %}">
+        {% endcomment %}
+        <!-- F.I.R.E.S. Calculator-->
         <link rel="stylesheet" href="{% static 'css/fires-calculator.css' %}">
         {% endblock vendor_styles %}
 
         {% block javascript %}
-
         <!-- Resources -->
         <!-- Around Bootstrap Theme -->
         <script src="{% static 'js/imagesloaded.pkgd.min.js' %}"></script>
@@ -20,7 +24,6 @@
         <!-- F.I.R.E.S. Calculator-->
         <script src="{% static 'js/fires-calculator-graph.js' %}" defer></script>
         <script src="{% static 'js/fires-calculator.js' %}" defer></script>
-
         {% endblock javascript %}
 
         {% block page_content %}
@@ -43,27 +46,36 @@
                                 {% csrf_token %}
 
                                 <!-- Birth Year -->
-                                <div class="row align-items-center mb-3">
-                                    <label for="birthyear-input" class="col-md-4 col-form-label">Your Birth Year</label>
-                                    <div class="col-md-8">
+                                <div class="row align-items-center mb-5">
+                                    <label for="birthyear-input" class="col-md-5 col-form-label" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="left" data-bs-trigger="hover" title="Popover" data-bs-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus ornare sem.">
+                                        Your Birth Year
+                                        <span class="ai-info ml-5 fs-5"></span>
+                                    </label>
+                                    <div class="col-md-7">
                                         <input class="form-control" type="number" id="birthyear-input" min="1900" max="2021" placeholder="1984" name="birth_year" value="1984" required>
                                         <div class="invalid-feedback">Please input your birth year as a number between 1900 and 2021.</div>
-                                    </div> <!-- /.col-md-8 -->
+                                    </div> <!-- /.col-md-7 -->
                                 </div> <!-- /. row -->
 
                                 <!-- Retirement Duration In Years -->
-                                <div class="row align-items-center mb-3 d-none">
-                                    <label for="retirementduration-input" class="col-md-4 col-form-label">Retirement Duration In Years</label>
-                                    <div class="col-md-8">
+                                <div class="row align-items-center mb-5 d-none">
+                                    <label for="retirementduration-input" class="col-md-5 col-form-label" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="left" data-bs-trigger="hover" title="Popover" data-bs-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus ornare sem.">
+                                        Retirement Duration In Years
+                                        <span class="ai-info ml-5 fs-5"></span>
+                                    </label>
+                                    <div class="col-md-7">
                                         <input class="form-control" type="number" id="retirementduration-input" min="1" max="99" placeholder="Your Retirement Duration In Years" name="years_duration" value="30" required>
                                         <div class="invalid-feedback">Please input your Retirement Duration In Years as a number between 1 and 99.</div>
                                     </div>
                                 </div> <!-- /. row -->
 
                                 <!-- Currency -->
-                                <div class="row align-items-center mb-3 d-none">
-                                    <label for="currency-input" class="col-md-4 col-form-label">Currency</label>
-                                    <div class="col-md-8">
+                                <div class="row align-items-center mb-5 d-none">
+                                    <label for="currency-input" class="col-md-5 col-form-label" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="left" data-bs-trigger="hover" title="Popover" data-bs-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus ornare sem.">
+                                        Currency
+                                        <span class="ai-info ml-5 fs-5"></span>
+                                    </label>
+                                    <div class="col-md-7">
                                         <select class="form-select" id="currency-input" name="currency" required>
                                             <option value="">Choose option...</option>
                                             <option value="EUR" selected>EUR</option>
@@ -73,67 +85,106 @@
                                 </div> <!-- /. row -->
 
                                 <!-- Yearly Gross Income-->
-                                <div class="row align-items-center mb-3">
-                                    <label for="grossincomeperyear-input" class="col-md-4 col-form-label">Yearly Net Income</label>
-                                    <div class="col-md-8">
+                                <div class="row align-items-center mb-5">
+                                    <label for="grossincomeperyear-input" class="col-md-5 col-form-label" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="left" data-bs-trigger="hover" title="Popover" data-bs-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus ornare sem.">
+                                        Yearly Net Income
+                                        <span class="ai-info ml-5 fs-5"></span>
+                                    </label>
+                                    <div class="col-md-7">
                                         <input class="form-control" type="number" id="grossincomeperyear-input" name="income_gross_per_year" min="0" placeholder="30000" value="30000" required>
                                         <div class="invalid-feedback">Please input your Yearly Gross Income as a number greater than or equal to 0.</div>
                                     </div>
                                 </div> <!-- /. row -->
 
                                 <!-- Yearly Expenses -->
-                                <div class="row align-items-center mb-3">
-                                    <label for="portfoliointerestperyear-input" class="col-md-4 col-form-label">Yearly Expenses</label>
-                                    <div class="col-md-8">
+                                <div class="row align-items-center mb-5">
+                                    <label for="portfoliointerestperyear-input" class="col-md-5 col-form-label" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="left" data-bs-trigger="hover" title="Popover" data-bs-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus ornare sem.">
+                                        Yearly Expenses
+                                        <span class="ai-info ml-5 fs-5"></span>
+                                    </label>
+                                    <div class="col-md-7">
                                         <input class="form-control" type="number" id="expensesperyear-input" name="expenses_per_year" min="0" placeholder="25000" value="25000" required>
                                         <div class="invalid-feedback">Please input your Yearly Expenses as a number greater than or equal to 0.</div>
                                     </div>
                                 </div> <!-- /. row -->
 
                                 <!-- Portfolio Value -->
-                                <div class="row align-items-center mb-3">
-                                    <label for="portfoliovalue-input" class="col-md-4 col-form-label">Current Portfolio Value</label>
-                                    <div class="col-md-8">
+                                <div class="row align-items-center mb-5">
+                                    <label for="portfoliovalue-input" class="col-md-5 col-form-label" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="left" data-bs-trigger="hover" title="Popover" data-bs-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus ornare sem.">
+                                        Current Portfolio Value
+                                        <span class="ai-info ml-5 fs-5"></span>
+                                    </label>
+                                    <div class="col-md-7">
                                         <input class="form-control" type="number" id="portfoliovalue-input" name="portfolio_value" min="0" placeholder="1000" value="1000" required>
                                         <div class="invalid-feedback">Please input your Current Portfolio Value as a number greater than or equal to 0.</div>
                                     </div>
                                 </div> <!-- /. row -->
 
                                 <!-- Yearly Portfolio Interest -->
-                                <div class="row align-items-center mb-3">
-                                    <label for="portfoliointerestperyear-input" class="col-md-4 col-form-label">Yearly Portfolio Interest</label>
-                                    <div class="col-md-8">
+                                <div class="row align-items-center mb-5">
+                                    <label for="portfoliointerestperyear-input" class="col-md-5 col-form-label" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="left" data-bs-trigger="hover" title="Popover" data-bs-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus ornare sem.">
+                                        Yearly Portfolio Interest
+                                        <span class="ai-info ml-5 fs-5"></span>
+                                    </label>
+                                    <div class="col-md-7">
                                         <input class="form-control" type="number" id="portfoliointerestperyear-input" name="portfolio_percentage_per_year" min="-100" max="100" placeholder="10" value="10" required>
                                         <div class="invalid-feedback">Please input your Yearly Portfolio Interest as a number between -100 and 100.</div>
                                     </div>
                                 </div> <!-- /. row -->
 
                                 <!-- Yearly Inflation Percentage -->
-                                <div class="row align-items-center mb-3">
-                                    <label for="inflationpercentageperyear-input" class="col-md-4 col-form-label">Yearly Inflation Percentage</label>
-                                    <div class="col-md-8">
+                                <div class="row align-items-center mb-5">
+                                    <label for="inflationpercentageperyear-input" class="col-md-5 col-form-label" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="left" data-bs-trigger="hover" title="Popover" data-bs-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus ornare sem.">
+                                        Yearly Inflation Percentage
+                                        <span class="ai-info ml-5 fs-5"></span>
+                                    </label>
+                                    <div class="col-md-7">
                                         <input class="form-control" type="number" id="inflationpercentageperyear-input" name="inflation_percentage_per_year" min="-100" max="100" placeholder="2" value="2" required>
                                         <div class="invalid-feedback">Please input your Yearly Inflation Percentage as a number between -100 and 100.</div>
                                     </div>
                                 </div> <!-- /. row -->
 
-                                <!-- Agree to Terms and Conditions -->
-                                <div class="row align-items-center mt-4 mb-3">
-                                    <div class="col-md-8 ms-auto">
+                                <!-- Risk Profile: Range slider -->
+                                <div class="row align-items-center mb-5">
+
+                                    <label for="riskprofileInput" class="col-md-5 col-form-label" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="left" data-bs-trigger="hover" title="Popover" data-bs-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus ornare sem.">
+                                        Your Risk Profile
+                                        <span class="ai-info ml-5 fs-5"></span>
+                                    </label>
+                                    <div class="col-md-7">
+                                        <!-- Range input -->
+                                        <div class="mb-3">
+                                            <div class="row">
+                                                <div class="col-8">
+                                                    <input class="form-range" type="range" name="riskpprofile" id="riskprofileInput" min="1" max="10" step="0.1" value="4" oninput="riskprofileOutput.value = riskprofileInput.value">
+                                                </div>
+                                                <div class="col-4">
+                                                    <span class="border rounded py-2 px-3">
+                                                        <output name="riskprofileResult" id="riskprofileOutput">4</output>%
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div> <!-- /.col s-->
+                                </div> <!-- /. row -->
+
+                                <!-- Privacy Statement -->
+                                <div class="row align-items-center mt-5 mb-5">
+                                    <div class="col-md-7 ms-auto">
                                         <p class="card-text fs-sm">
                                             <i>
                                                 The values you submit will not be visible to anyone, nor will they be saved, or shared with third parties.
                                             </i>
                                         </p>
-                                    </div> <!-- /.col-md-8 -->
+                                    </div> <!-- /.col-md-7 -->
                                 </div> <!-- /. row -->
 
                                 <!-- Submit Button -->
-                                <div class="row align-items-center mb-3">
-                                    <div class="col-md-8 ms-auto text-center">
+                                <div class="row align-items-center mb-5">
+                                    <div class="col-md-7 ms-auto text-center">
 
                                         <button id="submit-fires-calculator-form" class="btn btn-primary my-3" type="submit" onsubmit="() => firesCalculate();">Show my retirement age!</button>
-                                    </div> <!-- /.col-md-8 -->
+                                    </div> <!-- /.col-md-7 -->
                                 </div> <!-- /. row -->
 
                             </form>
@@ -278,5 +329,10 @@
 
                     </div> <!-- /.col -->
                 </div> <!-- /.row -->
-
                 {% endblock page_content %}
+
+                {% block vendor_scripts %}
+                {% comment %}
+                <script src="{% static 'js/nouislider.min.js' %}"></script>
+                {% endcomment %}
+                {% endblock vendor_scripts %}
