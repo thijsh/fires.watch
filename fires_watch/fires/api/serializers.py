@@ -107,6 +107,7 @@ class FiresCalculateSerializer(serializers.Serializer):
             if (months % 12) == 0:
                 result["graph_years"].append(
                     {
+                        "year": months / 12,
                         "portfolio": round(year["portfolio"]),
                         "interest": round(year["interest"]),
                         "change": round(year["change"]),

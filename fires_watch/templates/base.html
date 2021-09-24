@@ -5,13 +5,22 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>{% block title %}FIRES.watch | F.I.R.E.S.watch is an online tool to quickly calculate your F.I.R.E Stock portfolio.{% endblock title %}</title>
+    <title>{% block title %}FIRES.watch | An online tool to quickly calculate your F.I.R.E stock portfolio.{% endblock title %}</title>
     <!-- SEO Meta Tags-->
     <meta name="description" content="F.I.R.E.S.watch is an online tool to quickly calculate your F.I.R.E Stock portfolio.">
     <meta name="keywords" content="financial independence early retirement stock calculator watcher tracker monitor dashboard">
     <meta name="author" content="Thijs Houtenbos, Raoul Capello">
     <!-- Viewport-->
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Web Manifest -->
+    <link rel="manifest" href="{% static 'images/favicons/manifest.json' %}">
+    <!-- Favicon and Touch Icons-->
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'images/favicons/apple-touch-icon.png' %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/favicons/favicon-32x32.png' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'images/favicons/favicon-16x16.png' %}">
+    <link rel="mask-icon" color="#5bbad5" href="{% static 'images/favicons/safari-pinned-tab.svg' %}">
+    <meta name="msapplication-TileColor" content="#766df4">
+    <meta name="theme-color" content="#ffffff">
 
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
@@ -45,7 +54,7 @@
 
         {% block page_content %}
         <!-- Page content-->
-        <div class="container d-flex flex-column pt-5 mt-n6" style="flex: 1 0 auto;">
+        <div class="container d-flex flex-column pt-5" style="flex: 1 0 auto;">
             {% block content %}This is not the content you're looking for.{% endblock content %}
         </div> <!-- /.container -->
         {% endblock page_content %}

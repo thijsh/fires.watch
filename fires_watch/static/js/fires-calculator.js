@@ -28,6 +28,8 @@ function firesCalculate() {
         var formatCurrency = new Intl.NumberFormat(undefined, {
           style: "currency",
           currency: "EUR",
+          minimumFractionDigits: 0,
+          maximumFractionDigits: 0,
         });
         const portfolioValue = formatCurrency.format(result["portfolio"]);
         document.getElementById("results-portfolio-value").innerHTML =
@@ -39,6 +41,9 @@ function firesCalculate() {
         ) {
           document.getElementById("results-pane").classList.remove("d-none");
         }
+
+        // Generate graph
+        generateFiresGraph(result["graph_years"]);
 
         // Debug
         console.log(result);

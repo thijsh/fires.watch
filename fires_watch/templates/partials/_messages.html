@@ -1,24 +1,26 @@
                 <!-- Messages -->
-                <div class="col-lg-6 mx-auto mt-4 mt-lg-3 mb-3" style="min-height: 85px;">
-                    {% if messages %}
-                    {% for message in messages %}
-                    <!-- {{ message.tags|capfirst }} Alert -->
-                    <div class="alert d-flex alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-                        {% if message.tags == 'success' %}
-                        <i class="ai-check-circle fs-xl me-3"></i>
+                <div class="container">
+                    <div class="col-lg-6 mx-auto mt-4 mt-lg-3 mb-3">
+                        {% if messages %}
+                        {% for message in messages %}
+                        <!-- {{ message.tags|capfirst }} Alert -->
+                        <div class="alert d-flex alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                            {% if message.tags == 'success' %}
+                            <i class="ai-check-circle fs-xl me-3"></i>
+                            {% endif %}
+                            {% if message.tags == 'warning' %}
+                            <i class="ai-alert-triangle fs-xl me-3"></i>
+                            {% endif %}
+                            {% if message.tags == 'danger' %}
+                            <i class="ai-x-circle fs-xl me-3"></i>
+                            {% endif %}
+                            {% if message.tags == 'info' %}
+                            <i class="ai-alert-circle fs-xl me-3"></i>
+                            {% endif %}
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                        {% endfor %}
                         {% endif %}
-                        {% if message.tags == 'warning' %}
-                        <i class="ai-alert-triangle fs-xl me-3"></i>
-                        {% endif %}
-                        {% if message.tags == 'danger' %}
-                        <i class="ai-x-circle fs-xl me-3"></i>
-                        {% endif %}
-                        {% if message.tags == 'info' %}
-                        <i class="ai-alert-circle fs-xl me-3"></i>
-                        {% endif %}
-                        {{ message }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                    {% endfor %}
-                    {% endif %}
-                </div>
+                    </div> <!-- /.col-lg-6 -->
+                </div> <!-- /.container -->

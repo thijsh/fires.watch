@@ -8,14 +8,18 @@
         {% block javascript %}
 
         <!-- Resources -->
+        <!-- Around Bootstrap Theme -->
+        <script src="{% static 'js/imagesloaded.pkgd.min.js' %}"></script>
+        <script src="{% static 'js/shuffle.min.js' %}"></script>
+
         <!-- https://www.amcharts.com/demos/stacked-column-chart/ -->
         <script src="https://cdn.amcharts.com/lib/4/core.js"></script>
         <script src="https://cdn.amcharts.com/lib/4/charts.js"></script>
         <script src="https://cdn.amcharts.com/lib/4/themes/animated.js"></script>
 
         <!-- F.I.R.E.S. Calculator-->
-        <script src="{% static 'js/fires-calculator.js' %}" defer></script>
         <script src="{% static 'js/fires-calculator-graph.js' %}" defer></script>
+        <script src="{% static 'js/fires-calculator.js' %}" defer></script>
 
         {% endblock javascript %}
 
@@ -24,12 +28,13 @@
         <!-- F.I.R.E.S.calculator -->
         <div class="container my-5">
 
-            <div class="row">
-                <div class="col-sm-6 mx-auto mb-5">
-                    <div class="card card-hover">
+            <div class="row mb-5">
+                <div class="col-sm-6 mx-auto">
+
+                    <div class="card card-hover mb-5">
                         <div class="card-body">
 
-                            <h5 class="card-title">F.I.R.E.S. Calculator</h5>
+                            <h5 class="card-title">F.I.R.E. Calculator</h5>
 
                             <p class="card-text fs-sm">Calculate your Financial Independence Retirement age here.</p>
 
@@ -39,15 +44,15 @@
 
                                 <!-- Birth Year -->
                                 <div class="row align-items-center mb-3">
-                                    <label for="birthyear-input" class="col-md-4 col-form-label">Birth Year</label>
+                                    <label for="birthyear-input" class="col-md-4 col-form-label">Your Birth Year</label>
                                     <div class="col-md-8">
-                                        <input class="form-control" type="number" id="birthyear-input" min="1900" max="2021" placeholder="Your Birth Year" name="birth_year" value="1984" required>
+                                        <input class="form-control" type="number" id="birthyear-input" min="1900" max="2021" placeholder="1984" name="birth_year" value="1984" required>
                                         <div class="invalid-feedback">Please input your birth year as a number between 1900 and 2021.</div>
                                     </div> <!-- /.col-md-8 -->
                                 </div> <!-- /. row -->
 
                                 <!-- Retirement Duration In Years -->
-                                <div class="row align-items-center mb-3">
+                                <div class="row align-items-center mb-3 d-none">
                                     <label for="retirementduration-input" class="col-md-4 col-form-label">Retirement Duration In Years</label>
                                     <div class="col-md-8">
                                         <input class="form-control" type="number" id="retirementduration-input" min="1" max="99" placeholder="Your Retirement Duration In Years" name="years_duration" value="30" required>
@@ -56,7 +61,7 @@
                                 </div> <!-- /. row -->
 
                                 <!-- Currency -->
-                                <div class="row align-items-center mb-3">
+                                <div class="row align-items-center mb-3 d-none">
                                     <label for="currency-input" class="col-md-4 col-form-label">Currency</label>
                                     <div class="col-md-8">
                                         <select class="form-select" id="currency-input" name="currency" required>
@@ -67,66 +72,67 @@
                                     </div>
                                 </div> <!-- /. row -->
 
-                                <!-- Gross Income Per Year -->
+                                <!-- Yearly Gross Income-->
                                 <div class="row align-items-center mb-3">
-                                    <label for="grossincomeperyear-input" class="col-md-4 col-form-label">Gross Income Per Year</label>
+                                    <label for="grossincomeperyear-input" class="col-md-4 col-form-label">Yearly Net Income</label>
                                     <div class="col-md-8">
-                                        <input class="form-control" type="number" id="grossincomeperyear-input" name="income_gross_per_year" min="0" placeholder="Your Gross Income Per Year" value="50000" required>
-                                        <div class="invalid-feedback">Please input your Gross Income Per Year as a number greater than or equal to 0.</div>
+                                        <input class="form-control" type="number" id="grossincomeperyear-input" name="income_gross_per_year" min="0" placeholder="30000" value="30000" required>
+                                        <div class="invalid-feedback">Please input your Yearly Gross Income as a number greater than or equal to 0.</div>
                                     </div>
                                 </div> <!-- /. row -->
 
-                                <!-- Expenses Per Year -->
+                                <!-- Yearly Expenses -->
                                 <div class="row align-items-center mb-3">
-                                    <label for="portfoliointerestperyear-input" class="col-md-4 col-form-label">Expenses Per Year</label>
+                                    <label for="portfoliointerestperyear-input" class="col-md-4 col-form-label">Yearly Expenses</label>
                                     <div class="col-md-8">
-                                        <input class="form-control" type="number" id="expensesperyear-input" name="expenses_per_year" min="0" placeholder="Your Expenses Per Year" value="25000" required>
-                                        <div class="invalid-feedback">Please input your Expenses Per Year as a number greater than or equal to 0.</div>
+                                        <input class="form-control" type="number" id="expensesperyear-input" name="expenses_per_year" min="0" placeholder="25000" value="25000" required>
+                                        <div class="invalid-feedback">Please input your Yearly Expenses as a number greater than or equal to 0.</div>
                                     </div>
                                 </div> <!-- /. row -->
 
                                 <!-- Portfolio Value -->
                                 <div class="row align-items-center mb-3">
-                                    <label for="portfoliovalue-input" class="col-md-4 col-form-label">Portfolio Value</label>
+                                    <label for="portfoliovalue-input" class="col-md-4 col-form-label">Current Portfolio Value</label>
                                     <div class="col-md-8">
-                                        <input class="form-control" type="number" id="portfoliovalue-input" name="portfolio_value" min="0" placeholder="Your Portfolio Value" value="100000" required>
-                                        <div class="invalid-feedback">Please input your Portfolio Value as a number greater than or equal to 0.</div>
+                                        <input class="form-control" type="number" id="portfoliovalue-input" name="portfolio_value" min="0" placeholder="1000" value="1000" required>
+                                        <div class="invalid-feedback">Please input your Current Portfolio Value as a number greater than or equal to 0.</div>
                                     </div>
                                 </div> <!-- /. row -->
 
-                                <!-- Portfolio Interest Per Year -->
+                                <!-- Yearly Portfolio Interest -->
                                 <div class="row align-items-center mb-3">
-                                    <label for="portfoliointerestperyear-input" class="col-md-4 col-form-label">Portfolio Interest Per Year</label>
+                                    <label for="portfoliointerestperyear-input" class="col-md-4 col-form-label">Yearly Portfolio Interest</label>
                                     <div class="col-md-8">
-                                        <input class="form-control" type="number" id="portfoliointerestperyear-input" name="portfolio_percentage_per_year" min="-100" max="100" placeholder="Your Portfolio Interest Per Year" value="10" required>
-                                        <div class="invalid-feedback">Please input your Portfolio Interest Per Year as a number between -100 and 100.</div>
+                                        <input class="form-control" type="number" id="portfoliointerestperyear-input" name="portfolio_percentage_per_year" min="-100" max="100" placeholder="10" value="10" required>
+                                        <div class="invalid-feedback">Please input your Yearly Portfolio Interest as a number between -100 and 100.</div>
                                     </div>
                                 </div> <!-- /. row -->
 
-                                <!-- Inflation Percentage Per Year -->
+                                <!-- Yearly Inflation Percentage -->
                                 <div class="row align-items-center mb-3">
-                                    <label for="inflationpercentageperyear-input" class="col-md-4 col-form-label">Inflation Percentage Per Year</label>
+                                    <label for="inflationpercentageperyear-input" class="col-md-4 col-form-label">Yearly Inflation Percentage</label>
                                     <div class="col-md-8">
-                                        <input class="form-control" type="number" id="inflationpercentageperyear-input" name="inflation_percentage_per_year" min="-100" max="100" placeholder="Your Inflation Percentage Per Year" value="2" required>
-                                        <div class="invalid-feedback">Please input your Inflation Percentage Per Year as a number between -100 and 100.</div>
+                                        <input class="form-control" type="number" id="inflationpercentageperyear-input" name="inflation_percentage_per_year" min="-100" max="100" placeholder="2" value="2" required>
+                                        <div class="invalid-feedback">Please input your Yearly Inflation Percentage as a number between -100 and 100.</div>
                                     </div>
                                 </div> <!-- /. row -->
 
                                 <!-- Agree to Terms and Conditions -->
                                 <div class="row align-items-center mt-4 mb-3">
                                     <div class="col-md-8 ms-auto">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="terms-and-conditions-input" name="terms-and-conditions" required>
-                                            <label class="form-check-label" for="terms-and-conditions-input">Agree to terms and conditions</label>
-                                            <div class="invalid-feedback">You must agree before submitting.</div>
-                                        </div> <!-- /.form-check -->
+                                        <p class="card-text fs-sm">
+                                            <i>
+                                                The values you submit will not be visible to anyone, nor will they be saved, or shared with third parties.
+                                            </i>
+                                        </p>
                                     </div> <!-- /.col-md-8 -->
                                 </div> <!-- /. row -->
 
                                 <!-- Submit Button -->
                                 <div class="row align-items-center mb-3">
-                                    <div class="col-md-8 ms-auto">
-                                        <button id="submit-fires-calculator-form" class="btn btn-primary my-3" type="submit" onsubmit="() => firesCalculate();">Calculate my retirement age!</button>
+                                    <div class="col-md-8 ms-auto text-center">
+
+                                        <button id="submit-fires-calculator-form" class="btn btn-primary my-3" type="submit" onsubmit="() => firesCalculate();">Show my retirement age!</button>
                                     </div> <!-- /.col-md-8 -->
                                 </div> <!-- /. row -->
 
@@ -134,6 +140,7 @@
 
                         </div> <!-- /.card-body -->
                     </div> <!-- /.card -->
+
                 </div> <!-- /.col-sm-6 -->
 
                 <div id="results-pane" class="col-sm-6 d-none">
@@ -149,29 +156,48 @@
 
                                     <p class="card-text fs-sm">Submit different values and compare your results!</p>
 
-                                    <ul class="list-unstyled mb-0">
-                                        <li class="d-flex pb-3 border-bottom">
-                                            <i class="ai-clock fs-lg mt-2 mb-0 text-primary"></i>
-                                            <div class="ps-3">
-                                                <span class="fs-ms text-muted">Years until retirement</span>
-                                                <p id="results-months" class="card-text fs-sm"><i>Fill in the form to the left to display these results.</i></p>
-                                            </div>
-                                        </li>
-                                        <li class="d-flex pt-2 pb-3 border-bottom">
-                                            <i class="ai-award fs-lg mt-2 mb-0 text-primary"></i>
-                                            <div class="ps-3">
-                                                <span class="fs-ms text-muted">Retirement Age</span>
-                                                <p id="results-age" class="card-text fs-sm"><i>Fill in the form to the left to display these results.</i></p>
-                                            </div>
-                                        </li>
-                                        <li class="d-flex pt-2">
-                                            <i class="ai-star fs-lg mt-2 mb-0 text-primary"></i>
-                                            <div class="ps-3">
-                                                <span class="fs-ms text-muted">Portfolio Value when retiring</span>
-                                                <p id="results-portfolio-value" class="card-text fs-sm"><i>Fill in the form to the left to display these results.</i></p>
-                                            </div>
-                                        </li>
-                                    </ul>
+                                    <div class="row">
+
+                                        <div class="col-sm-3">
+
+                                            <ul class="list-unstyled mb-0">
+                                                <li class="d-flex pb-3">
+                                                    <i class="ai-clock fs-lg mt-2 mb-0 text-primary"></i>
+                                                    <div class="ps-3 text-sm-center">
+                                                        <span class="fs-ms text-muted">Years until retirement</span>
+                                                        <p id="results-months" class="card-text fs-lead fw-bold">N/A</p>
+                                                    </div>
+                                                </li>
+                                            </ul> <!-- /.ul -->
+
+                                        </div> <!-- /.col -->
+                                        <div class="col-sm-3">
+
+                                            <ul class="list-unstyled mb-0">
+                                                <li class="d-flex pb-3">
+                                                    <i class="ai-award fs-lg mt-2 mb-0 text-primary"></i>
+                                                    <div class="ps-3 text-sm-center">
+                                                        <span class="fs-ms text-muted">Retirement Age</span>
+                                                        <p id="results-age" class="card-text fs-lead fw-bold">N/A</p>
+                                                    </div>
+                                                </li>
+                                            </ul> <!-- /.ul -->
+
+                                        </div> <!-- /.col -->
+                                        <div class="col-sm-4">
+
+                                            <ul class="list-unstyled mb-0">
+                                                <li class="d-flex pb-3">
+                                                    <i class="ai-star fs-lg mt-2 mb-0 text-primary"></i>
+                                                    <div class="ps-3 text-sm-center">
+                                                        <span class="fs-ms text-muted">Portfolio Value when retiring</span>
+                                                        <p id="results-portfolio-value" class="card-text fs-lead fw-bold">N/A</p>
+                                                    </div>
+                                                </li>
+                                            </ul> <!-- /.ul -->
+
+                                        </div> <!-- /.col -->
+                                    </div> <!-- /.row -->
 
                                 </div> <!-- /.card-body -->
                             </div> <!-- /.card -->
@@ -179,15 +205,32 @@
                         </div> <!-- /.col -->
                     </div> <!-- /.row -->
 
-                    <div class="row mb-0">
-                        <div class="col align-self-end">
+                    <div class="row">
+                        <div class="col">
 
                             <!-- Graph -->
-                            <div class="card card-hover">
+                            <div class="card card-hover mb-5">
                                 <div class="card-body">
+
+                                    <p class="text-center">
+                                        <span class="text-muted fs-xs">
+                                            <i>
+                                                Use the controls on top of the chart to zoom in to a particular period of time.<br>
+                                                Drag the selected area left or right to move up or down the projected results.
+                                            </i>
+                                        </span>
+                                    </p>
 
                                     <!-- https://www.amcharts.com/demos/stacked-column-chart/ -->
                                     <div id="chartdiv"></div>
+
+                                    <p class="text-center mt-3">
+                                        <span class="text-muted fs-xs">
+                                            <i>
+                                                Click on the colored squares to hide or show categories.
+                                            </i>
+                                        </span>
+                                    </p>
 
                                 </div> <!-- /.card-body -->
                             </div> <!-- /.card -->
@@ -199,19 +242,41 @@
 
             </div> <!-- /.row -->
 
-            <div class="row my-5">
-                <div class="col-sm-6 mx-auto mb-5">
+            <div class="row mb-5">
+                <div class="col">
 
-                    <!-- Graph -->
-                    <div class="card card-hover">
-                        <div class="card-body">
-                            <!-- Default testimonial -->
-                            <blockquote class="blockquote text-center">
-                                <p class="extra-large text-heading fw-medium">The best time to plant a tree was 20 years ago. The second best time is now.</p>
-                            </blockquote>
+                    <!-- Masonry grid: 3 columns -->
+                    <div class="masonry-grid" data-columns="2">
+
+                        <!-- F.I.R.E. Definition -->
+                        <div class="masonry-grid-item">
+                            <div class="card card-hover">
+                                <div class="card-body">
+                                    <h5 class="card-title">What is F.I.R.E. ?</h5>
+                                    <p class="card-text fs-sm">Financial Independence, Retire Early (FIRE) is a movement of people devoted to a program of extreme savings and investment that aims to allow them to retire far earlier than traditional budgets and retirement plans would permit.</p>
+                                    <p><span class="text-muted fs-xs"><i>By clicking on the link below you'll be redirected to an external site.</i></span></p>
+                                    <a href="https://www.investopedia.com/terms/f/financial-independence-retire-early-fire.asp" class="btn btn-sm btn-primary" target="_blank">Read more on Investopedia.com</a>
+                                </div>
+                            </div>
                         </div>
-                    </div> <!-- /.row -->
 
-                </div> <!-- /.container -->
+                        <!-- Inspirational Quote -->
+                        <div class="masonry-grid-item">
+                            <div class="card card-hover">
+                                <div class="card-body">
+                                    <blockquote class="blockquote text-center">
+                                        <p class="extra-large text-heading fw-normal">
+                                            <i>
+                                                The best time to plant a tree was 20 years ago.<br>
+                                                The second best time is now.
+                                            </i>
+                                        </p>
+                                    </blockquote>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div> <!-- /.col -->
+                </div> <!-- /.row -->
 
                 {% endblock page_content %}

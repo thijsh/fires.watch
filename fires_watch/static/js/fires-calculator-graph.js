@@ -1,86 +1,100 @@
-//https://www.amcharts.com/demos/stacked-column-chart/
-am4core.ready(function () {
-  // Themes begin
-  am4core.useTheme(am4themes_animated);
-  // Themes end
+function generateFiresGraph(data) {
+  // https://www.amcharts.com/demos/stacked-column-chart/
+  am4core.ready(function () {
+    // Themes
+    am4core.useTheme(am4themes_animated);
 
-  // Create chart instance
-  var chart = am4core.create("chartdiv", am4charts.XYChart);
+    // Create chart instance
+    var chart = am4core.create("chartdiv", am4charts.XYChart);
 
-  // Add data
-  chart.data = [
-    {
-      year: "2016",
-      europe: 2.5,
-      namerica: 2.5,
-      asia: 2.1,
-      lamerica: 0.3,
-      meast: 0.2,
-      africa: 0.1,
-    },
-    {
-      year: "2017",
-      europe: 2.6,
-      namerica: 2.7,
-      asia: 2.2,
-      lamerica: 0.3,
-      meast: 0.3,
-      africa: 0.1,
-    },
-    {
-      year: "2018",
-      europe: 2.8,
-      namerica: 2.9,
-      asia: 2.4,
-      lamerica: 0.3,
-      meast: 0.3,
-      africa: 0.1,
-    },
-  ];
+    // Add data
+    chart.data = data;
 
-  // Create axes
-  var categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
-  categoryAxis.dataFields.category = "year";
-  categoryAxis.renderer.grid.template.location = 0;
+    // Create axes
+    var categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
+    categoryAxis.dataFields.category = "year";
+    categoryAxis.title.text = "Years from now ->";
+    categoryAxis.showOnInit = false; // Zoom in before showing results
+    // categoryAxis.renderer.grid.template.location = 0;
 
-  var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
-  valueAxis.renderer.inside = true;
-  valueAxis.renderer.labels.template.disabled = true;
-  valueAxis.min = 0;
+    var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+    valueAxis.title.text = "Value ->";
+    valueAxis.min = 0;
 
-  // Create series
-  function createSeries(field, name) {
-    // Set up series
-    var series = chart.series.push(new am4charts.ColumnSeries());
-    series.name = name;
-    series.dataFields.valueY = field;
-    series.dataFields.categoryX = "year";
-    series.sequencedInterpolation = true;
+    // valueAxis.renderer.labels.template.disabled = true;
+    // valueAxis.renderer.inside = true;
 
-    // Make it stacked
-    series.stacked = true;
+    // Create series
+    function createSeries(field, name) {
+      // Set up series
+      var series = chart.series.push(new am4charts.ColumnSeries());
+      series.name = name;
+      series.dataFields.valueY = field;
+      series.dataFields.categoryX = "year";
+      series.sequencedInterpolation = true;
 
-    // Configure columns
-    series.columns.template.width = am4core.percent(60);
-    series.columns.template.tooltipText =
-      "[bold]{name}[/]\n[font-size:14px]{categoryX}: {valueY}";
+      // Make it stacked
+      series.stacked = true;
 
-    // Add label
-    var labelBullet = series.bullets.push(new am4charts.LabelBullet());
-    labelBullet.label.text = "{valueY}";
-    labelBullet.locationY = 0.5;
-    labelBullet.label.hideOversized = true;
+      // Configure columns
+      series.columns.template.width = am4core.percent(60);
+      // series.columns.template.tooltipText =
+      series.tooltipText =
+        "[bold]{name}[/]\n[font-size:14px]Year {categoryX}\n[bold]€ {valueY.formatNumber('###,###.##')}[/]";
 
-    return series;
-  }
+      return series;
+    }
 
-  createSeries("europe", "Europe");
-  createSeries("namerica", "North America");
-  createSeries("asia", "Asia-Pacific");
-  createSeries("lamerica", "Latin America");
-  createSeries("meast", "Middle-East");
-  createSeries("africa", "Africa");
+    portfolio_series = createSeries("portfolio", "Portfolio");
+    interest_series = createSeries("interest", "Interest");
+    change_series = createSeries("change", "Change");
 
-  // Legend
-  chart.legend = new am4charts.Legend();
-}); // end am4core.ready()
+    // Legend
+    chart.legend = new am4charts.Legend();
+    chart.legend.itemContainers.template.paddingTop = 25;
+
+    // Add scrollbar
+    var scrollbar = new am4charts.XYChartScrollbar();
+    scrollbar.series.push(portfolio_series);
+    chart.scrollbarX = scrollbar;
+
+    // Cursor
+    chart.cursor = new am4charts.XYCursor();
+    // chart.cursor.lineY.disabled = true;
+    valueAxis.cursorTooltipEnabled = false;
+
+    // Disable grid labels
+    categoryAxis.renderer.grid.template.disabled = true;
+    valueAxis.renderer.grid.template.disabled = true;
+
+    // Guide
+    // var range = valueAxis.axisRanges.create();
+    // range.value = 1000000;
+    // range.axisFill.fill = am4core.color("#396478");
+    // range.axisFill.fillOpacity = 0.2;
+    // range.grid.strokeOpacity = 0;
+    // range.grid.strokeWidth = 2;
+
+    chart.numberFormatter.numberFormat = "#.a"; // Format big numbers
+    valueAxis.calculateTotals = true; // Calculate total stacked values
+
+    // Responsive
+    chart.responsive.enabled = true;
+    chart.responsive.rules.push({
+      relevant: function (target) {
+        if (target.pixelWidth <= 600) {
+          return true;
+        }
+        return false;
+      },
+      state: function (target, stateId) {
+        return;
+      },
+    });
+
+    // Zoom in to first 30 years
+    chart.events.on("ready", function () {
+      categoryAxis.zoomToIndexes(0, 30, false, true);
+    });
+  }); // end am4core.ready()
+}
