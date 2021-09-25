@@ -2,6 +2,7 @@ import datetime
 
 
 class Fires:
+    @staticmethod
     def calculate(data):
         """
         Calculate portfolio value per month by:
