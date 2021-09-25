@@ -19,11 +19,7 @@
 
   // Configure the Black code formatter
   "python.formatting.provider": "black",
-  "python.formatting.blackArgs": [
-    // PEP8 suggests 79 characters max https://www.python.org/dev/peps/pep-0008/#id19
-    "--line-length=79",
-    "--skip-string-normalization"
-  ],
+  "python.formatting.blackArgs": ["--skip-string-normalization"],
   // Black version 20.8b1 has a bug that doesn't add a newline
   // to the end of a file, so let's make sure
   "files.insertFinalNewline": true,
