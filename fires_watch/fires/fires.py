@@ -1,6 +1,107 @@
 import datetime
 
 
+class UserInfo:
+    birth_year: int
+    current_portfolio: int
+    income_yearly: int
+    income_monthly: int
+    expenses_monthly: int
+    savings_monthly: int
+    inflation_percent_monthly: float
+    portfolio_interest_percent_monthly: float
+    safe_rate_yearly: float
+
+    def __init__(self, data):
+        self.birth_year = data["birth_year"]
+        self.current_portfolio = data["portfolio_value"]
+        self.income_yearly = data["income_gross_per_year"]
+        self.income_monthly = self.income_yearly / 12
+        self.expenses_monthly = data["expenses_per_year"] / 12
+        self.savings_monthly = max(self.income_monthly - self.expenses_monthly, 0)
+        self.inflation_percent_monthly = (
+            1 + data["inflation_percentage_per_year"] / 100
+        ) ** (1 / 12)
+        self.portfolio_interest_percent_monthly = (
+            1 + data["portfolio_percentage_per_year"] / 100
+        ) ** (1 / 12)
+        self.safe_rate_yearly = data["max_withdrawal_percentage_per_year"] / 100
+
+
+class MonthlyResults:
+    userinfo: UserInfo
+    interest: int
+    savings: int
+    target_portfolio: int
+
+    def __init__(self, userinfo):
+        self.userinfo = userinfo
+
+    def transactions(self):
+        # Calculate values for this month
+        self.userinfo.expenses_monthly *= self.userinfo.inflation_percent_monthly
+        self.interest = self.userinfo.current_portfolio * (
+            self.userinfo.portfolio_interest_percent_monthly - 1
+        )
+        self.savings = max(
+            self.userinfo.income_monthly - self.userinfo.expenses_monthly, 0
+        )
+
+    def portfolio_values(self):
+        # Calculate portfolio values from this month's data
+        self.userinfo.current_portfolio = (
+            self.userinfo.current_portfolio
+            * self.userinfo.portfolio_interest_percent_monthly
+            + self.savings
+        )
+        self.target_portfolio = (
+            self.userinfo.expenses_monthly * 12 / self.userinfo.safe_rate_yearly
+        )
+
+
+class Retirement:
+    userinfo: UserInfo
+    pension_started: bool
+    current_year: int
+    cost_of_living: int
+    portfolio: int
+    months: int
+    years: int
+    age: int
+
+    def __init__(self, userinfo):
+        self.userinfo = userinfo
+        self.pension_started = False
+
+    def goal_reached(self, target_portfolio):
+        """Determine if the target portfolio has been reached this month."""
+
+        if (
+            self.userinfo.current_portfolio > target_portfolio
+            and not self.pension_started
+        ):
+            return True
+
+        return False
+
+    def calculate_result(self, months):
+        """
+        Determines retirement age details.
+        Should only run once, if self.goal_reached returns True.
+        """
+
+        self.pension_started = True
+
+        self.current_year = datetime.date.today().year
+
+        # Remember these values from this first retirement month
+        self.cost_of_living = round(self.userinfo.expenses_monthly * 12)
+        self.portfolio = round(self.userinfo.current_portfolio)
+        self.months = months  # Months until retirement
+        self.years = self.months // 12  # Truncate float to integer
+        self.age = self.current_year - self.userinfo.birth_year + self.months // 12
+
+
 class Fires:
     @staticmethod
     def calculate(data):
@@ -31,18 +132,17 @@ class Fires:
         - Total change (result of expenses, savings, withdrawal rate)
         """
 
-        current_year = datetime.date.today().year
+        # Extract userinfo input from data and parse the values we'll need
+        userinfo = UserInfo(data)
 
-        # Extract user input from data and deduce the values we'll need
-        portfolio = data["portfolio_value"]
-        expenses_per_month = data["expenses_per_year"] / 12
-        inflation_factor = (1 + data["inflation_percentage_per_year"] / 100) ** (1 / 12)
-        portfolio_factor = (1 + data["portfolio_percentage_per_year"] / 100) ** (1 / 12)
-        safe_rate_per_year = data["max_withdrawal_percentage_per_year"] / 100
+        # Initialize monthly calculators
+        monthly = MonthlyResults(userinfo)
+
+        # Initialize retirement calculator
+        retirement = Retirement(userinfo)
 
         # Initialize some values to start our monthly calculation loop
         months = 0
-        pension_started = False
         result = {
             "cost_of_living": None,
             "portfolio": None,
@@ -66,34 +166,27 @@ class Fires:
             months += 1
 
             # Calculate values for this month
-            expenses_per_month = expenses_per_month * inflation_factor
-            interest = portfolio * (portfolio_factor - 1)
-            savings_per_month = max(
-                data["income_gross_per_year"] / 12 - expenses_per_month, 0
-            )
+            monthly.transactions()
+            monthly.portfolio_values()
 
-            # Calculate portfolio values from this month's data
-            portfolio = portfolio * portfolio_factor + savings_per_month
-            needed_portfolio = expenses_per_month * 12 / safe_rate_per_year
-
-            # Determine if the target portfolio has been reached this moonth ..
-            if portfolio > needed_portfolio and pension_started is False:
-
-                # .. if so, retirement starts this month :)
-                pension_started = True  # Run this code block only once
+            if retirement.goal_reached(monthly.target_portfolio):
 
                 # Remember these values from this first retirement month
-                result["cost_of_living"] = round(expenses_per_month * 12)
-                result["portfolio"] = round(portfolio)
-                result["months"] = months  # Months until retirement
-                result["years"] = months // 12  # Truncate float to integer
-                result["age"] = current_year - data["birth_year"] + months // 12
+                retirement.calculate_result(months)
+                result["cost_of_living"] = retirement.cost_of_living
+                result["portfolio"] = retirement.portfolio
+                result["months"] = retirement.months  # Months until retirement
+                result["years"] = retirement.years  # Truncate float to integer
+                result["age"] = retirement.age
+
             # Store this month's value as graph data
             month = {
-                "portfolio": portfolio,
-                "interest": interest,
+                "portfolio": userinfo.current_portfolio,
+                "interest": monthly.interest,
                 "change": (
-                    -expenses_per_month if pension_started else savings_per_month
+                    -userinfo.expenses_monthly
+                    if retirement.pension_started
+                    else monthly.savings
                 ),
             }
             result["graph_months"].append(
@@ -119,7 +212,7 @@ class Fires:
                 )
             # Stop graph calculation after requested pension length
             if (
-                pension_started
+                retirement.pension_started
                 and months >= result["months"] + 12 * data["years_duration"]
             ):
                 break
