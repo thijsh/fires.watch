@@ -21,7 +21,6 @@
   "python.formatting.provider": "black",
   "python.formatting.blackArgs": [
     // PEP8 suggests 79 characters max https://www.python.org/dev/peps/pep-0008/#id19
-    "--line-length=79",
     "--skip-string-normalization"
   ],
   // Black version 20.8b1 has a bug that doesn't add a newline
@@ -42,11 +41,13 @@
   },
 
   // Editor rulers
-  // PEP8 suggests 79 characters max
-  // and 72 characters for docstrings or comments
+  // 72 for comments
+  // 88 for Python code preferred
+  // 120 for Python code maximum allowed
+  // PEP8 Saucy Sauce:
   // https://www.python.org/dev/peps/pep-0008/#id19
   "[python]": {
-    "editor.rulers": [72, 80, 120]
+    "editor.rulers": [72, 88, 120]
   },
   "cSpell.words": [
     "automodule",
