@@ -17,8 +17,8 @@ class Result:
     - age
     """
 
-    cost_of_living: int
-    portfolio: int
+    cost_of_living: float
+    portfolio: float
     months: int
     years: int
     age: int
@@ -82,9 +82,9 @@ class Calculator:
     userinfo: UserInfo
     result: Result
     month_count: int
-    monthly_interest: int
-    monthly_savings: int
-    target_portfolio: int
+    monthly_interest: float
+    monthly_savings: float
+    target_portfolio: float
     yearly_data: object
 
     def __init__(self, userinfo, result):
