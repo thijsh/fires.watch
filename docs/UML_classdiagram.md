@@ -19,23 +19,23 @@ class UserInfo {
     # years_duration
     # current_portfolio
     # initial_portfolio
-    # income_yearly
-    # income_monthly
-    # expenses_monthly
-    # savings_monthly
+    # user_yearly_income
+    # user_monthly_income
+    # user_monthly_expenses
+    # user_monthly_savings
     # inflation_percent_monthly
     # portfolio_interest_percent_monthly
     # safe_rate_yearly
     # current_year
-    # result
 }
 
 class Calculator {
     # userinfo
-    # yearly
-    # count
-    # interest
-    # savings
+    # result
+    # yearly_data
+    # month_count
+    # monthly_interest
+    # monthly_savings
     # target_portfolio
     + start_year()
     + generate_yearly_data(months)
