@@ -52,7 +52,6 @@ class UserInfo:
     portfolio_interest_percent_monthly: float
     safe_rate_yearly: float
     current_year: int
-    result: Result
 
     def __init__(self, data):
         """Parse user input and determine initial values."""
@@ -74,23 +73,22 @@ class UserInfo:
         self.safe_rate_yearly = data["max_withdrawal_percentage_per_year"] / 100
         self.current_year = datetime.date.today().year
 
-        # Initialize Result class
-        self.result = Result()
-
 
 class Calculator:
     """Calculates and tracks monthly results."""
 
     userinfo: UserInfo
+    result: Result
     count: int
     interest: int
     savings: int
     target_portfolio: int
     yearly_data: object
 
-    def __init__(self, userinfo):
+    def __init__(self, userinfo, result):
         """Set initial values"""
         self.userinfo = userinfo
+        self.result = result
         self.count = 0
 
     def start_year(self):
@@ -160,7 +158,7 @@ class Calculator:
             "interest": round(self.interest),
             "change": round(
                 -self.userinfo.expenses_monthly
-                if self.userinfo.result.pension_started
+                if self.result.pension_started
                 else self.savings
             ),
         }
@@ -170,7 +168,7 @@ class Calculator:
 
         return (
             self.userinfo.current_portfolio > self.target_portfolio
-            and not self.userinfo.result.pension_started
+            and not self.result.pension_started
         )
 
     def calculate_retirement_values(self):
@@ -180,18 +178,18 @@ class Calculator:
         """
 
         # Make sure this method only runs once
-        self.userinfo.result.pension_started = True
+        self.result.pension_started = True
 
         # Remember the values from this first retirement month
-        self.userinfo.result.months = self.count
-        self.userinfo.result.years = self.userinfo.result.months // 12
-        self.userinfo.result.age = (
+        self.result.months = self.count
+        self.result.years = self.result.months // 12
+        self.result.age = (
             self.userinfo.current_year
             - self.userinfo.birth_year
-            + self.userinfo.result.months // 12
+            + self.result.months // 12
         )
-        self.userinfo.result.cost_of_living = round(self.userinfo.expenses_monthly * 12)
-        self.userinfo.result.portfolio = round(self.userinfo.current_portfolio)
+        self.result.cost_of_living = round(self.userinfo.expenses_monthly * 12)
+        self.result.portfolio = round(self.userinfo.current_portfolio)
 
     def run(self):
         """Run monthly calculation for a set amount of cycles."""
@@ -212,7 +210,7 @@ class Calculator:
 
             # Store this month's value as graph data
             monthly_data = self.generate_monthly_data()
-            self.userinfo.result.graph_months.append(monthly_data)
+            self.result.graph_months.append(monthly_data)
 
             # Add month values to year tally and store end of the year
             # NOTE: year portfolio is added and in next step divided by
@@ -222,18 +220,17 @@ class Calculator:
 
             if (self.count % 12) == 0:
                 yearly_data = self.generate_yearly_data(self.count)
-                self.userinfo.result.graph_years.append(yearly_data)
+                self.result.graph_years.append(yearly_data)
 
             # Stop graph calculation after requested pension length
             if (
-                self.userinfo.result.pension_started
-                and self.count
-                >= self.userinfo.result.months + 12 * self.userinfo.years_duration
+                self.result.pension_started
+                and self.count >= self.result.months + 12 * self.userinfo.years_duration
             ):
                 break
 
     def results_as_dict(self):
-        return asdict(self.userinfo.result)
+        return asdict(self.result)
 
 
 class Fires:
@@ -266,12 +263,15 @@ class Fires:
         - Total change (result of expenses, savings, withdrawal rate)
         """
 
+        # Initialize Result dataclass object
+        result = Result()
+
         # Extract userinfo input from data, and parse the values we'll need,
         # while initializing the results object structure.
         userinfo = UserInfo(data)
 
         # Initialize monthly calculator and yearly data object
-        monthly_calculation = Calculator(userinfo)
+        monthly_calculation = Calculator(userinfo, result)
 
         # Run calculations and generate results
         monthly_calculation.run()
