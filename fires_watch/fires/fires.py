@@ -78,7 +78,7 @@ class UserInfo:
         self.result = Result()
 
 
-class MonthCalculator:
+class Calculator:
     """Calculates and tracks monthly results."""
 
     userinfo: UserInfo
@@ -110,11 +110,11 @@ class MonthCalculator:
             "change": round(self.yearly_data["change"]),
         }
 
-    def add_monthly_data(self, monthly_data):
+    def add_monthly_to_yearly_data(self, monthly_data):
         for key, value in monthly_data.items():
             self.yearly_data[key] += value
 
-    def calculate_transactions(self):
+    def calculate_monthly_transactions(self):
         """
         Calculate monthly transaction values:
         - Expenses
@@ -138,7 +138,7 @@ class MonthCalculator:
             self.userinfo.income_monthly - self.userinfo.expenses_monthly, 0
         )
 
-    def calculate_portfolio_values(self):
+    def calculate_monthly_portfolio_values(self):
         """
         Calculate this month's portfolio values:
         - Current portfolio value (based on interest and savings)
@@ -165,7 +165,7 @@ class MonthCalculator:
             ),
         }
 
-    def is_goal_reached(self):
+    def is_retirement_goal_reached(self):
         """Determine if the target portfolio has been reached this month."""
 
         return (
@@ -173,10 +173,10 @@ class MonthCalculator:
             and not self.userinfo.result.pension_started
         )
 
-    def calculate_retirement(self):
+    def calculate_retirement_values(self):
         """
         Determines retirement age details.
-        Should only run once, and only after self.is_goal_reached returns True.
+        Should only run once, and only after self.is_retirement_goal_reached returns True.
         """
 
         # Make sure this method only runs once
@@ -203,12 +203,12 @@ class MonthCalculator:
             self.count += 1
 
             # Calculate values for this month
-            self.calculate_transactions()
-            self.calculate_portfolio_values()
+            self.calculate_monthly_transactions()
+            self.calculate_monthly_portfolio_values()
 
-            if self.is_goal_reached():
+            if self.is_retirement_goal_reached():
                 # Remember these values from this first retirement month
-                self.calculate_retirement()
+                self.calculate_retirement_values()
 
             # Store this month's value as graph data
             monthly_data = self.generate_monthly_data()
@@ -218,7 +218,7 @@ class MonthCalculator:
             # NOTE: year portfolio is added and in next step divided by
             #       12 to get the average portfolio size during the year.
 
-            self.add_monthly_data(monthly_data)
+            self.add_monthly_to_yearly_data(monthly_data)
 
             if (self.count % 12) == 0:
                 yearly_data = self.generate_yearly_data(self.count)
@@ -271,7 +271,7 @@ class Fires:
         userinfo = UserInfo(data)
 
         # Initialize monthly calculator and yearly data object
-        monthly_calculation = MonthCalculator(userinfo)
+        monthly_calculation = Calculator(userinfo)
 
         # Run calculations and generate results
         monthly_calculation.run()
