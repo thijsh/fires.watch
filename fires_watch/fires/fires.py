@@ -1,5 +1,6 @@
 import datetime
 from dataclasses import asdict, dataclass
+from typing import List
 
 
 @dataclass
@@ -13,8 +14,8 @@ class Result:
     months: int
     years: int
     age: int
-    graph_months: object
-    graph_years: object
+    graph_months: List
+    graph_years: List
 
     def __init__(self):
         self.cost_of_living = None
@@ -89,7 +90,6 @@ class RetirementCalculator:
 
         return False
 
-    # def calculate_result(self, months):
     def calculate_result(self, months):
         """
         Determines retirement age details.
@@ -111,11 +111,6 @@ class RetirementCalculator:
         self.userinfo.result.cost_of_living = round(self.userinfo.expenses_monthly * 12)
         self.userinfo.result.portfolio = round(self.userinfo.current_portfolio)
 
-    def calculate_result_new(self):
-        # TODO
-        self.userinfo.result.cost_of_living = round(self.userinfo.expenses_monthly * 12)
-        self.userinfo.result.portfolio = round(self.userinfo.current_portfolio)
-
 
 class MonthlyResults:
     """Calculates and tracks monthly results."""
@@ -126,7 +121,7 @@ class MonthlyResults:
     interest: int
     savings: int
     target_portfolio: int
-    month: object
+    data: object
 
     def __init__(self, userinfo, retirement):
         self.userinfo = userinfo
@@ -155,11 +150,8 @@ class MonthlyResults:
         )
 
     def save(self):
-
-        # TODO
-
         # Store this month's value as graph data
-        self.month = {
+        self.data = {
             "portfolio": round(self.userinfo.current_portfolio),
             "interest": round(self.interest),
             "change": round(
@@ -173,22 +165,21 @@ class MonthlyResults:
 class YearlyResults:
     """Calculates and tracks yearly results."""
 
-    year: object
+    data: object
 
     def start_year(self):
-        self.year = {
+        self.data = {
             "portfolio": 0,
             "interest": 0,
             "change": 0,
         }
 
     def save(self, months):
-        # TODO
-        self.year = {
+        self.data = {
             "year": months / 12,
-            "portfolio": self.year["portfolio"] // 12,
-            "interest": round(self.year["interest"]),
-            "change": round(self.year["change"]),
+            "portfolio": self.data["portfolio"] // 12,
+            "interest": round(self.data["interest"]),
+            "change": round(self.data["change"]),
         }
 
 
@@ -230,17 +221,12 @@ class Fires:
         retirement = RetirementCalculator(userinfo)
 
         # Initialize monthly and yearly calculators
-        # TODO: should not need to pass retirement
+        # TODO: should not need to pass retirement, maybe?
         monthly = MonthlyResults(userinfo, retirement)
         yearly = YearlyResults()
 
-        # Initialize some values to start our monthly calculation loop
-        # TODO
-        result = asdict(userinfo.result)
-
         # Run a monthly calculation, for a maximum of 100 years
         while monthly.count < 1200:
-            # TODO
             # At the start of every year ..
             if (monthly.count % 12) == 0:
                 yearly.start_year()
@@ -251,34 +237,22 @@ class Fires:
             monthly.portfolio_values()
 
             if retirement.goal_reached(monthly.target_portfolio):
-
-                # TODO
                 # Remember these values from this first retirement month
                 retirement.calculate_result(monthly.count)
-                result["cost_of_living"] = retirement.cost_of_living
-                result["portfolio"] = retirement.portfolio
-                result["months"] = userinfo.result.months  # Months until retirement
-                result["years"] = userinfo.result.years  # Truncate float to integer
-                result["age"] = userinfo.result.age
 
-            # TODO
             # Store this month's value as graph data
             monthly.save()
-            month = monthly.month
-
-            result["graph_months"].append(month)
+            userinfo.result.graph_months.append(monthly.data)
 
             # Add month values to year tally and store end of the year
             # NOTE: year portfolio is added and in next step divided by
             #       12 to get the average portfolio size during the year.
 
-            # TODO
-            for key, value in month.items():
-                yearly.year[key] += value
+            for key, value in monthly.data.items():
+                yearly.data[key] += value
             if (monthly.count % 12) == 0:
                 yearly.save(monthly.count)
-                year = yearly.year
-                result["graph_years"].append(year)
+                userinfo.result.graph_years.append(yearly.data)
 
             # Stop graph calculation after requested pension length
             if (
@@ -288,5 +262,4 @@ class Fires:
             ):
                 break
 
-        # result = asdict(resultObject)
-        return result
+        return asdict(userinfo.result)
