@@ -28,27 +28,23 @@ class UserInfo {
     # safe_rate_yearly
     # current_year
     # result
-    
 }
 
-class YearCalculator {
-    + start_year()
-    + generate_yearly_data(months)
-    + add_monthly_data(monthly_data)
-}
-
-class MonthCalculator {
+class Calculator {
     # userinfo
     # yearly
     # count
     # interest
     # savings
     # target_portfolio
-    + calculate_transactions()
-    + calculate_portfolio_values()
+    + start_year()
+    + generate_yearly_data(months)
+    + add_monthly_to_yearly_data(monthly_data)
+    + calculate_monthly_transactions()
+    + calculate_monthly_portfolio_values()
     + generate_monthly_data()
-    + is_goal_reached()
-    + calculate_retirement()
+    + is_retirement_goal_reached()
+    + calculate_retirement_values()
     + run()
 }
 
@@ -56,7 +52,8 @@ note left of Result::stuff
     Example note
 endnote
 
-' Result " one-to- " *-- "one" UserInfo #line:blue;text:blue : **owner**
+UserInfo "Feeds into" *--> Calculator #line:blue;text:blue
+Calculator "Generates" *--> Result #line:blue;text:blue
 
 
 @enduml
