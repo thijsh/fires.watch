@@ -44,10 +44,10 @@ class UserInfo:
     years_duration: int
     current_portfolio: int
     initial_portfolio: int
-    income_yearly: int
-    income_monthly: int
-    expenses_monthly: int
-    savings_monthly: int
+    user_yearly_income: int
+    user_monthly_income: int
+    user_monthly_expenses: int
+    user_monthly_savings: int
     inflation_percent_monthly: float
     portfolio_interest_percent_monthly: float
     safe_rate_yearly: float
@@ -60,10 +60,12 @@ class UserInfo:
         self.years_duration = data["years_duration"]
         self.initial_portfolio = data["portfolio_value"]
         self.current_portfolio = self.initial_portfolio
-        self.income_yearly = data["income_gross_per_year"]
-        self.income_monthly = self.income_yearly / 12
-        self.expenses_monthly = data["expenses_per_year"] / 12
-        self.savings_monthly = max(self.income_monthly - self.expenses_monthly, 0)
+        self.user_yearly_income = data["income_gross_per_year"]
+        self.user_monthly_income = self.user_yearly_income / 12
+        self.user_monthly_expenses = data["expenses_per_year"] / 12
+        self.user_monthly_savings = max(
+            self.user_monthly_income - self.user_monthly_expenses, 0
+        )
         self.inflation_percent_monthly = (
             1 + data["inflation_percentage_per_year"] / 100
         ) ** (1 / 12)
@@ -79,9 +81,9 @@ class Calculator:
 
     userinfo: UserInfo
     result: Result
-    count: int
-    interest: int
-    savings: int
+    month_count: int
+    monthly_interest: int
+    monthly_savings: int
     target_portfolio: int
     yearly_data: object
 
@@ -89,7 +91,7 @@ class Calculator:
         """Set initial values"""
         self.userinfo = userinfo
         self.result = result
-        self.count = 0
+        self.month_count = 0
 
     def start_year(self):
         """Set yearly values to zero at the start of the year."""
@@ -128,12 +130,12 @@ class Calculator:
         # portfolio before pension start) and this is also not
         # representative of reality we place a lower bound on the
         # monthly savings of at least zero.
-        self.userinfo.expenses_monthly *= self.userinfo.inflation_percent_monthly
-        self.interest = self.userinfo.current_portfolio * (
+        self.userinfo.user_monthly_expenses *= self.userinfo.inflation_percent_monthly
+        self.monthly_interest = self.userinfo.current_portfolio * (
             self.userinfo.portfolio_interest_percent_monthly - 1
         )
-        self.savings = max(
-            self.userinfo.income_monthly - self.userinfo.expenses_monthly, 0
+        self.monthly_savings = max(
+            self.userinfo.user_monthly_income - self.userinfo.user_monthly_expenses, 0
         )
 
     def calculate_monthly_portfolio_values(self):
@@ -145,21 +147,21 @@ class Calculator:
         self.userinfo.current_portfolio = (
             self.userinfo.current_portfolio
             * self.userinfo.portfolio_interest_percent_monthly
-            + self.savings
+            + self.monthly_savings
         )
         self.target_portfolio = (
-            self.userinfo.expenses_monthly * 12 / self.userinfo.safe_rate_yearly
+            self.userinfo.user_monthly_expenses * 12 / self.userinfo.safe_rate_yearly
         )
 
     def generate_monthly_data(self):
         """Store monthly results for further processing."""
         return {
             "portfolio": round(self.userinfo.current_portfolio),
-            "interest": round(self.interest),
+            "interest": round(self.monthly_interest),
             "change": round(
-                -self.userinfo.expenses_monthly
+                -self.userinfo.user_monthly_expenses
                 if self.result.pension_started
-                else self.savings
+                else self.monthly_savings
             ),
         }
 
@@ -181,24 +183,24 @@ class Calculator:
         self.result.pension_started = True
 
         # Remember the values from this first retirement month
-        self.result.months = self.count
+        self.result.months = self.month_count
         self.result.years = self.result.months // 12
         self.result.age = (
             self.userinfo.current_year
             - self.userinfo.birth_year
             + self.result.months // 12
         )
-        self.result.cost_of_living = round(self.userinfo.expenses_monthly * 12)
+        self.result.cost_of_living = round(self.userinfo.user_monthly_expenses * 12)
         self.result.portfolio = round(self.userinfo.current_portfolio)
 
     def run(self):
         """Run monthly calculation for a set amount of cycles."""
 
-        while self.count < 1200:
+        while self.month_count < 1200:
             # At the start of every year ..
-            if (self.count % 12) == 0:
+            if (self.month_count % 12) == 0:
                 self.start_year()
-            self.count += 1
+            self.month_count += 1
 
             # Calculate values for this month
             self.calculate_monthly_transactions()
@@ -218,14 +220,15 @@ class Calculator:
 
             self.add_monthly_to_yearly_data(monthly_data)
 
-            if (self.count % 12) == 0:
-                yearly_data = self.generate_yearly_data(self.count)
+            if (self.month_count % 12) == 0:
+                yearly_data = self.generate_yearly_data(self.month_count)
                 self.result.graph_years.append(yearly_data)
 
             # Stop graph calculation after requested pension length
             if (
                 self.result.pension_started
-                and self.count >= self.result.months + 12 * self.userinfo.years_duration
+                and self.month_count
+                >= self.result.months + 12 * self.userinfo.years_duration
             ):
                 break
 
