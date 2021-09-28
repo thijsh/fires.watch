@@ -103,6 +103,10 @@ class Calculator:
 
     def generate_yearly_data(self, months):
         """Save the yearly totals for further processing."""
+
+        # NOTE: Yearly portfolio is added and divided by 12 to get the
+        #       average portfolio size during the year.
+
         return {
             "year": months / 12,
             "portfolio": self.yearly_data["portfolio"] // 12,
@@ -207,17 +211,14 @@ class Calculator:
             self.calculate_monthly_portfolio_values()
 
             if self.is_retirement_goal_reached():
-                # Remember these values from this first retirement month
+                # Save values from the first retirement month
                 self.calculate_retirement_values()
 
             # Store this month's value as graph data
             monthly_data = self.generate_monthly_data()
             self.result.graph_months.append(monthly_data)
 
-            # Add month values to year tally and store end of the year
-            # NOTE: year portfolio is added and in next step divided by
-            #       12 to get the average portfolio size during the year.
-
+            # Add monthly values to year tally and store at end of year
             self.add_monthly_to_yearly_data(monthly_data)
 
             if (self.month_count % 12) == 0:
@@ -269,15 +270,16 @@ class Fires:
         # Initialize Result dataclass object
         result = Result()
 
-        # Extract userinfo input from data, and parse the values we'll need,
-        # while initializing the results object structure.
+        # Extract userinfo input from data, and parse the values we'll
+        # need
         userinfo = UserInfo(data)
 
         # Initialize monthly calculator and yearly data object
-        monthly_calculation = Calculator(userinfo, result)
+        calculator = Calculator(userinfo, result)
 
         # Run calculations and generate results
-        monthly_calculation.run()
+        calculator.run()
 
-        # Convert Result() dataclass to a dictionary so it can be serialized to JSON
-        return monthly_calculation.results_as_dict()
+        # Convert Result() dataclass to a dictionary so it can be
+        # serialized to JSON
+        return calculator.results_as_dict()
