@@ -1,9 +1,38 @@
 import datetime
+from dataclasses import asdict, dataclass
+
+
+@dataclass
+class Result:
+    """
+    Contains all calculated results.
+    """
+
+    cost_of_living: int
+    portfolio: int
+    months: int
+    years: int
+    age: int
+    graph_months: object
+    graph_years: object
+
+    def __init__(self):
+        self.cost_of_living = None
+        self.portfolio = None
+        self.months = None
+        self.years = None
+        self.age = None
+        self.graph_months = []
+        self.graph_years = []
 
 
 class UserInfo:
+    """Contains all initial user info, and the Result() class."""
+
     birth_year: int
-    current_portfolio: int
+    years_duration: int
+    current_portfolio: int  # TODO: move to Result()
+    initial_portfolio: int
     income_yearly: int
     income_monthly: int
     expenses_monthly: int
@@ -11,10 +40,14 @@ class UserInfo:
     inflation_percent_monthly: float
     portfolio_interest_percent_monthly: float
     safe_rate_yearly: float
+    result: Result
 
     def __init__(self, data):
+        # Parse user input
         self.birth_year = data["birth_year"]
-        self.current_portfolio = data["portfolio_value"]
+        self.years_duration = data["years_duration"]
+        self.initial_portfolio = data["portfolio_value"]
+        self.current_portfolio = self.initial_portfolio
         self.income_yearly = data["income_gross_per_year"]
         self.income_monthly = self.income_yearly / 12
         self.expenses_monthly = data["expenses_per_year"] / 12
@@ -26,16 +59,79 @@ class UserInfo:
             1 + data["portfolio_percentage_per_year"] / 100
         ) ** (1 / 12)
         self.safe_rate_yearly = data["max_withdrawal_percentage_per_year"] / 100
+        # Initialize Result class
+        self.result = Result()
 
 
-class MonthlyResults:
+class RetirementCalculator:
     userinfo: UserInfo
-    interest: int
-    savings: int
-    target_portfolio: int
+    pension_started: bool
+    current_year: int
+    cost_of_living: int
+    portfolio: int
+    months: int
+    years: int
+    age: int
 
     def __init__(self, userinfo):
         self.userinfo = userinfo
+        self.pension_started = False
+        self.current_year = datetime.date.today().year
+
+    def goal_reached(self, target_portfolio):
+        """Determine if the target portfolio has been reached this month."""
+
+        if (
+            self.userinfo.current_portfolio > target_portfolio
+            and not self.pension_started
+        ):
+            return True
+
+        return False
+
+    # def calculate_result(self, months):
+    def calculate_result(self, months):
+        """
+        Determines retirement age details.
+        Should only run once, if self.goal_reached returns True.
+        """
+
+        self.pension_started = True
+
+        # Remember these values from this first retirement month
+        self.cost_of_living = round(self.userinfo.expenses_monthly * 12)
+        self.portfolio = round(self.userinfo.current_portfolio)
+        self.userinfo.result.months = months
+        self.userinfo.result.years = self.userinfo.result.months // 12
+        self.userinfo.result.age = (
+            self.current_year
+            - self.userinfo.birth_year
+            + self.userinfo.result.months // 12
+        )
+        self.userinfo.result.cost_of_living = round(self.userinfo.expenses_monthly * 12)
+        self.userinfo.result.portfolio = round(self.userinfo.current_portfolio)
+
+    def calculate_result_new(self):
+        # TODO
+        self.userinfo.result.cost_of_living = round(self.userinfo.expenses_monthly * 12)
+        self.userinfo.result.portfolio = round(self.userinfo.current_portfolio)
+
+
+class MonthlyResults:
+    """Calculates and tracks monthly results."""
+
+    userinfo: UserInfo
+    retirement: RetirementCalculator
+    count: int
+    interest: int
+    savings: int
+    target_portfolio: int
+    month: object
+
+    def __init__(self, userinfo, retirement):
+        self.userinfo = userinfo
+        self.retirement = retirement
+        self.count = 0
 
     def transactions(self):
         # Calculate values for this month
@@ -58,48 +154,42 @@ class MonthlyResults:
             self.userinfo.expenses_monthly * 12 / self.userinfo.safe_rate_yearly
         )
 
+    def save(self):
 
-class Retirement:
-    userinfo: UserInfo
-    pension_started: bool
-    current_year: int
-    cost_of_living: int
-    portfolio: int
-    months: int
-    years: int
-    age: int
+        # TODO
 
-    def __init__(self, userinfo):
-        self.userinfo = userinfo
-        self.pension_started = False
+        # Store this month's value as graph data
+        self.month = {
+            "portfolio": round(self.userinfo.current_portfolio),
+            "interest": round(self.interest),
+            "change": round(
+                -self.userinfo.expenses_monthly
+                if self.retirement.pension_started
+                else self.savings
+            ),
+        }
 
-    def goal_reached(self, target_portfolio):
-        """Determine if the target portfolio has been reached this month."""
 
-        if (
-            self.userinfo.current_portfolio > target_portfolio
-            and not self.pension_started
-        ):
-            return True
+class YearlyResults:
+    """Calculates and tracks yearly results."""
 
-        return False
+    year: object
 
-    def calculate_result(self, months):
-        """
-        Determines retirement age details.
-        Should only run once, if self.goal_reached returns True.
-        """
+    def start_year(self):
+        self.year = {
+            "portfolio": 0,
+            "interest": 0,
+            "change": 0,
+        }
 
-        self.pension_started = True
-
-        self.current_year = datetime.date.today().year
-
-        # Remember these values from this first retirement month
-        self.cost_of_living = round(self.userinfo.expenses_monthly * 12)
-        self.portfolio = round(self.userinfo.current_portfolio)
-        self.months = months  # Months until retirement
-        self.years = self.months // 12  # Truncate float to integer
-        self.age = self.current_year - self.userinfo.birth_year + self.months // 12
+    def save(self, months):
+        # TODO
+        self.year = {
+            "year": months / 12,
+            "portfolio": self.year["portfolio"] // 12,
+            "interest": round(self.year["interest"]),
+            "change": round(self.year["change"]),
+        }
 
 
 class Fires:
@@ -132,38 +222,29 @@ class Fires:
         - Total change (result of expenses, savings, withdrawal rate)
         """
 
-        # Extract userinfo input from data and parse the values we'll need
+        # Extract userinfo input from data, and parse the values we'll need,
+        # while initializing the results object structure.
         userinfo = UserInfo(data)
 
-        # Initialize monthly calculators
-        monthly = MonthlyResults(userinfo)
-
         # Initialize retirement calculator
-        retirement = Retirement(userinfo)
+        retirement = RetirementCalculator(userinfo)
+
+        # Initialize monthly and yearly calculators
+        # TODO: should not need to pass retirement
+        monthly = MonthlyResults(userinfo, retirement)
+        yearly = YearlyResults()
 
         # Initialize some values to start our monthly calculation loop
-        months = 0
-        result = {
-            "cost_of_living": None,
-            "portfolio": None,
-            "months": None,
-            "years": None,
-            "age": None,
-            "graph_months": [],
-            "graph_years": [],
-        }
+        # TODO
+        result = asdict(userinfo.result)
 
         # Run a monthly calculation, for a maximum of 100 years
-        while months < 1200:
+        while monthly.count < 1200:
+            # TODO
             # At the start of every year ..
-            if (months % 12) == 0:
-                # .. start counters for this year ..
-                year = {
-                    "portfolio": 0,
-                    "interest": 0,
-                    "change": 0,
-                }
-            months += 1
+            if (monthly.count % 12) == 0:
+                yearly.start_year()
+            monthly.count += 1
 
             # Calculate values for this month
             monthly.transactions()
@@ -171,50 +252,41 @@ class Fires:
 
             if retirement.goal_reached(monthly.target_portfolio):
 
+                # TODO
                 # Remember these values from this first retirement month
-                retirement.calculate_result(months)
+                retirement.calculate_result(monthly.count)
                 result["cost_of_living"] = retirement.cost_of_living
                 result["portfolio"] = retirement.portfolio
-                result["months"] = retirement.months  # Months until retirement
-                result["years"] = retirement.years  # Truncate float to integer
-                result["age"] = retirement.age
+                result["months"] = userinfo.result.months  # Months until retirement
+                result["years"] = userinfo.result.years  # Truncate float to integer
+                result["age"] = userinfo.result.age
 
+            # TODO
             # Store this month's value as graph data
-            month = {
-                "portfolio": userinfo.current_portfolio,
-                "interest": monthly.interest,
-                "change": (
-                    -userinfo.expenses_monthly
-                    if retirement.pension_started
-                    else monthly.savings
-                ),
-            }
-            result["graph_months"].append(
-                {
-                    "portfolio": round(month["portfolio"]),
-                    "interest": round(month["interest"]),
-                    "change": round(month["change"]),
-                }
-            )
+            monthly.save()
+            month = monthly.month
+
+            result["graph_months"].append(month)
+
             # Add month values to year tally and store end of the year
             # NOTE: year portfolio is added and in next step divided by
             #       12 to get the average portfolio size during the year.
-            for variable in month:
-                year[variable] += month[variable]
-            if (months % 12) == 0:
-                result["graph_years"].append(
-                    {
-                        "year": months / 12,
-                        "portfolio": year["portfolio"] // 12,
-                        "interest": round(year["interest"]),
-                        "change": round(year["change"]),
-                    }
-                )
+
+            # TODO
+            for key, value in month.items():
+                yearly.year[key] += value
+            if (monthly.count % 12) == 0:
+                yearly.save(monthly.count)
+                year = yearly.year
+                result["graph_years"].append(year)
+
             # Stop graph calculation after requested pension length
             if (
                 retirement.pension_started
-                and months >= result["months"] + 12 * data["years_duration"]
+                and monthly.count
+                >= userinfo.result.months + 12 * userinfo.years_duration
             ):
                 break
 
+        # result = asdict(resultObject)
         return result
