@@ -48,13 +48,14 @@ class Calculator {
     + run()
 }
 
-note left of Result::stuff
-    Example note
-endnote
+note right of UserInfo: Initial data supplied by user.
+
+note right of Calculator: Responsible for all calculations.
+
+note right of Result: Resulting dataclass object, to be converted into a dictionary.
 
 UserInfo "Feeds into" *--> Calculator #line:blue;text:blue
 Calculator "Generates" *--> Result #line:blue;text:blue
-
 
 @enduml
 ```
