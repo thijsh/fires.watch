@@ -78,48 +78,41 @@ class UserInfo:
         self.result = Result()
 
 
-class YearCalculator:
-    """Calculates and tracks yearly results."""
-
-    data: object
-
-    def start_year(self):
-        """Set yearly values to zero at the start of the year."""
-        self.data = {
-            "portfolio": 0,
-            "interest": 0,
-            "change": 0,
-        }
-
-    def generate_year_data(self, months):
-        """Save the yearly totals for further processing."""
-        return {
-            "year": months / 12,
-            "portfolio": self.data["portfolio"] // 12,
-            "interest": round(self.data["interest"]),
-            "change": round(self.data["change"]),
-        }
-
-    def add_monthly_data(self, monthly_data):
-        for key, value in monthly_data.items():
-            self.data[key] += value
-
-
 class MonthCalculator:
     """Calculates and tracks monthly results."""
 
     userinfo: UserInfo
-    yearly: YearCalculator
     count: int
     interest: int
     savings: int
     target_portfolio: int
+    yearly_data: object
 
     def __init__(self, userinfo):
         """Set initial values"""
         self.userinfo = userinfo
         self.count = 0
-        self.yearly = YearCalculator()
+
+    def start_year(self):
+        """Set yearly values to zero at the start of the year."""
+        self.yearly_data = {
+            "portfolio": 0,
+            "interest": 0,
+            "change": 0,
+        }
+
+    def generate_yearly_data(self, months):
+        """Save the yearly totals for further processing."""
+        return {
+            "year": months / 12,
+            "portfolio": self.yearly_data["portfolio"] // 12,
+            "interest": round(self.yearly_data["interest"]),
+            "change": round(self.yearly_data["change"]),
+        }
+
+    def add_monthly_data(self, monthly_data):
+        for key, value in monthly_data.items():
+            self.yearly_data[key] += value
 
     def calculate_transactions(self):
         """
@@ -206,7 +199,7 @@ class MonthCalculator:
         while self.count < 1200:
             # At the start of every year ..
             if (self.count % 12) == 0:
-                self.yearly.start_year()
+                self.start_year()
             self.count += 1
 
             # Calculate values for this month
@@ -225,10 +218,10 @@ class MonthCalculator:
             # NOTE: year portfolio is added and in next step divided by
             #       12 to get the average portfolio size during the year.
 
-            self.yearly.add_monthly_data(monthly_data)
+            self.add_monthly_data(monthly_data)
 
             if (self.count % 12) == 0:
-                yearly_data = self.yearly.generate_year_data(self.count)
+                yearly_data = self.generate_yearly_data(self.count)
                 self.userinfo.result.graph_years.append(yearly_data)
 
             # Stop graph calculation after requested pension length
