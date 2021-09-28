@@ -15,7 +15,6 @@ class Result:
     - months
     - years
     - age
-
     """
 
     cost_of_living: int
@@ -58,7 +57,6 @@ class UserInfo:
     def __init__(self, data):
         """Parse user input and determine initial values."""
 
-        # Parse user input
         self.birth_year = data["birth_year"]
         self.years_duration = data["years_duration"]
         self.initial_portfolio = data["portfolio_value"]
@@ -80,7 +78,7 @@ class UserInfo:
         self.result = Result()
 
 
-class YearlyResults:
+class YearCalculator:
     """Calculates and tracks yearly results."""
 
     data: object
@@ -93,40 +91,52 @@ class YearlyResults:
             "change": 0,
         }
 
-    def save(self, months):
+    def generate_year_data(self, months):
         """Save the yearly totals for further processing."""
-        self.data = {
+        return {
             "year": months / 12,
             "portfolio": self.data["portfolio"] // 12,
             "interest": round(self.data["interest"]),
             "change": round(self.data["change"]),
         }
 
+    def add_monthly_data(self, monthly_data):
+        for key, value in monthly_data.items():
+            self.data[key] += value
+
 
 class MonthCalculator:
     """Calculates and tracks monthly results."""
 
     userinfo: UserInfo
-    yearly: YearlyResults
+    yearly: YearCalculator
     count: int
     interest: int
     savings: int
     target_portfolio: int
-    data: object
 
     def __init__(self, userinfo):
         """Set initial values"""
         self.userinfo = userinfo
         self.count = 0
-        self.yearly = YearlyResults()
+        self.yearly = YearCalculator()
 
-    def transactions(self):
+    def calculate_transactions(self):
         """
         Calculate monthly transaction values:
         - Expenses
         - Interest
         - Savings
         """
+        # NOTE:
+        # We save the income - expenses, and to err on the safe side of
+        # caution the expenses are inflation adjusted but income isn't
+        # (because it often lags behind inflation because capitalism).
+        # This results in the possibility of savings to go into negative
+        # numbers after years/decades (essentially depleting the
+        # portfolio before pension start) and this is also not
+        # representative of reality we place a lower bound on the
+        # monthly savings of at least zero.
         self.userinfo.expenses_monthly *= self.userinfo.inflation_percent_monthly
         self.interest = self.userinfo.current_portfolio * (
             self.userinfo.portfolio_interest_percent_monthly - 1
@@ -135,7 +145,7 @@ class MonthCalculator:
             self.userinfo.income_monthly - self.userinfo.expenses_monthly, 0
         )
 
-    def portfolio_values(self):
+    def calculate_portfolio_values(self):
         """
         Calculate this month's portfolio values:
         - Current portfolio value (based on interest and savings)
@@ -150,9 +160,9 @@ class MonthCalculator:
             self.userinfo.expenses_monthly * 12 / self.userinfo.safe_rate_yearly
         )
 
-    def save(self):
+    def generate_monthly_data(self):
         """Store monthly results for further processing."""
-        self.data = {
+        return {
             "portfolio": round(self.userinfo.current_portfolio),
             "interest": round(self.interest),
             "change": round(
@@ -162,21 +172,18 @@ class MonthCalculator:
             ),
         }
 
-    def goal_reached(self):
+    def is_goal_reached(self):
         """Determine if the target portfolio has been reached this month."""
 
-        if (
+        return (
             self.userinfo.current_portfolio > self.target_portfolio
             and not self.userinfo.result.pension_started
-        ):
-            return True
-
-        return False
+        )
 
     def calculate_retirement(self):
         """
         Determines retirement age details.
-        Should only run once, and only after self.goal_reached returns True.
+        Should only run once, and only after self.is_goal_reached returns True.
         """
 
         # Make sure this method only runs once
@@ -203,26 +210,26 @@ class MonthCalculator:
             self.count += 1
 
             # Calculate values for this month
-            self.transactions()
-            self.portfolio_values()
+            self.calculate_transactions()
+            self.calculate_portfolio_values()
 
-            if self.goal_reached():
+            if self.is_goal_reached():
                 # Remember these values from this first retirement month
                 self.calculate_retirement()
 
             # Store this month's value as graph data
-            self.save()
-            self.userinfo.result.graph_months.append(self.data)
+            monthly_data = self.generate_monthly_data()
+            self.userinfo.result.graph_months.append(monthly_data)
 
             # Add month values to year tally and store end of the year
             # NOTE: year portfolio is added and in next step divided by
             #       12 to get the average portfolio size during the year.
 
-            for key, value in self.data.items():
-                self.yearly.data[key] += value
+            self.yearly.add_monthly_data(monthly_data)
+
             if (self.count % 12) == 0:
-                self.yearly.save(self.count)
-                self.userinfo.result.graph_years.append(self.yearly.data)
+                yearly_data = self.yearly.generate_year_data(self.count)
+                self.userinfo.result.graph_years.append(yearly_data)
 
             # Stop graph calculation after requested pension length
             if (
@@ -231,6 +238,9 @@ class MonthCalculator:
                 >= self.userinfo.result.months + 12 * self.userinfo.years_duration
             ):
                 break
+
+    def results_as_dict(self):
+        return asdict(self.userinfo.result)
 
 
 class Fires:
@@ -274,4 +284,4 @@ class Fires:
         monthly_calculation.run()
 
         # Convert Result() dataclass to a dictionary so it can be serialized to JSON
-        return asdict(userinfo.result)
+        return monthly_calculation.results_as_dict()
