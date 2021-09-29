@@ -6,7 +6,7 @@ from typing import List
 @dataclass
 class Result:
     """
-    Contains all calculated results.
+    Contains all results we want to return.
     Dataclass, so it can be converted into a dictionary for serializing.
 
     At the moment retirement is reached, the following variables are recorded:
@@ -44,10 +44,10 @@ class UserInfo:
     years_duration: int
     current_portfolio: int
     initial_portfolio: int
-    user_yearly_income: int
-    user_monthly_income: int
-    user_monthly_expenses: int
-    user_monthly_savings: int
+    yearly_income: int
+    monthly_income: int
+    monthly_expenses: int
+    monthly_savings: int
     inflation_percent_monthly: float
     portfolio_interest_percent_monthly: float
     safe_rate_yearly: float
@@ -60,12 +60,10 @@ class UserInfo:
         self.years_duration = data["years_duration"]
         self.initial_portfolio = data["portfolio_value"]
         self.current_portfolio = self.initial_portfolio
-        self.user_yearly_income = data["income_gross_per_year"]
-        self.user_monthly_income = self.user_yearly_income / 12
-        self.user_monthly_expenses = data["expenses_per_year"] / 12
-        self.user_monthly_savings = max(
-            self.user_monthly_income - self.user_monthly_expenses, 0
-        )
+        self.yearly_income = data["income_gross_per_year"]
+        self.monthly_income = self.yearly_income / 12
+        self.monthly_expenses = data["expenses_per_year"] / 12
+        self.monthly_savings = max(self.monthly_income - self.monthly_expenses, 0)
         self.inflation_percent_monthly = (
             1 + data["inflation_percentage_per_year"] / 100
         ) ** (1 / 12)
@@ -134,12 +132,12 @@ class Calculator:
         # portfolio before pension start) and this is also not
         # representative of reality we place a lower bound on the
         # monthly savings of at least zero.
-        self.userinfo.user_monthly_expenses *= self.userinfo.inflation_percent_monthly
+        self.userinfo.monthly_expenses *= self.userinfo.inflation_percent_monthly
         self.monthly_interest = self.userinfo.current_portfolio * (
             self.userinfo.portfolio_interest_percent_monthly - 1
         )
         self.monthly_savings = max(
-            self.userinfo.user_monthly_income - self.userinfo.user_monthly_expenses, 0
+            self.userinfo.monthly_income - self.userinfo.monthly_expenses, 0
         )
 
     def calculate_monthly_portfolio_values(self):
@@ -154,7 +152,7 @@ class Calculator:
             + self.monthly_savings
         )
         self.target_portfolio = (
-            self.userinfo.user_monthly_expenses * 12 / self.userinfo.safe_rate_yearly
+            self.userinfo.monthly_expenses * 12 / self.userinfo.safe_rate_yearly
         )
 
     def generate_monthly_data(self):
@@ -163,7 +161,7 @@ class Calculator:
             "portfolio": round(self.userinfo.current_portfolio),
             "interest": round(self.monthly_interest),
             "change": round(
-                -self.userinfo.user_monthly_expenses
+                -self.userinfo.monthly_expenses
                 if self.result.pension_started
                 else self.monthly_savings
             ),
@@ -171,7 +169,6 @@ class Calculator:
 
     def is_retirement_goal_reached(self):
         """Determine if the target portfolio has been reached this month."""
-
         return (
             self.userinfo.current_portfolio > self.target_portfolio
             and not self.result.pension_started
@@ -194,7 +191,7 @@ class Calculator:
             - self.userinfo.birth_year
             + self.result.months // 12
         )
-        self.result.cost_of_living = round(self.userinfo.user_monthly_expenses * 12)
+        self.result.cost_of_living = round(self.userinfo.monthly_expenses * 12)
         self.result.portfolio = round(self.userinfo.current_portfolio)
 
     def run(self):
@@ -241,7 +238,7 @@ class Fires:
     @staticmethod
     def calculate(data):
         """
-        Calculate portfolio value per month by:
+        Calculate monthly portfolio value by:
         - Adding savings ((income - expenses_per_year) / 12)
         - Adding monthly portfolio percentage (deduced from yearly percentage)
         - Determine monthly inflation percentage (deduced from yearly percentage)
@@ -257,11 +254,11 @@ class Fires:
         - Years from now (to moment of retirement)
         - Age (when retiring)
 
-        Returned datasets meant for graphing:
+        Generated datasets meant for graphing:
         - Monthly
         - Yearly
 
-        For each datapoint in each dataset, we return:
+        For each datapoint in a dataset, we return (at that point in time):
         - Total portfolio value
         - Total interest value
         - Total change (result of expenses, savings, withdrawal rate)
@@ -270,11 +267,10 @@ class Fires:
         # Initialize Result dataclass object
         result = Result()
 
-        # Extract userinfo input from data, and parse the values we'll
-        # need
+        # Parse user input
         userinfo = UserInfo(data)
 
-        # Initialize monthly calculator and yearly data object
+        # Initialize calculator
         calculator = Calculator(userinfo, result)
 
         # Run calculations and generate results
