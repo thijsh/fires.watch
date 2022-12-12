@@ -1,4 +1,4 @@
-FROM postgres:13.2
+FROM postgres:13.9
 
 COPY ./compose/production/postgres/maintenance /usr/local/bin/maintenance
 RUN chmod +x /usr/local/bin/maintenance/*
