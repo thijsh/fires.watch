@@ -15,14 +15,10 @@ function generateFiresGraph(data) {
     categoryAxis.dataFields.category = "year";
     categoryAxis.title.text = "Years from now ->";
     categoryAxis.showOnInit = false; // Zoom in before showing results
-    // categoryAxis.renderer.grid.template.location = 0;
 
     var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
     valueAxis.title.text = "Value ->";
     valueAxis.min = 0;
-
-    // valueAxis.renderer.labels.template.disabled = true;
-    // valueAxis.renderer.inside = true;
 
     // Create series
     function createSeries(field, name) {
@@ -38,7 +34,6 @@ function generateFiresGraph(data) {
 
       // Configure columns
       series.columns.template.width = am4core.percent(60);
-      // series.columns.template.tooltipText =
       series.tooltipText =
         "[bold]{name}[/]\n[font-size:14px]Year {categoryX}\n[bold]€ {valueY.formatNumber('###,###.##')}[/]";
 
@@ -60,25 +55,16 @@ function generateFiresGraph(data) {
 
     // Cursor
     chart.cursor = new am4charts.XYCursor();
-    // chart.cursor.lineY.disabled = true;
     valueAxis.cursorTooltipEnabled = false;
 
     // Disable grid labels
     categoryAxis.renderer.grid.template.disabled = true;
     valueAxis.renderer.grid.template.disabled = true;
 
-    // Guide
-    // var range = valueAxis.axisRanges.create();
-    // range.value = 1000000;
-    // range.axisFill.fill = am4core.color("#396478");
-    // range.axisFill.fillOpacity = 0.2;
-    // range.grid.strokeOpacity = 0;
-    // range.grid.strokeWidth = 2;
-
     chart.numberFormatter.numberFormat = "#.a"; // Format big numbers
     valueAxis.calculateTotals = true; // Calculate total stacked values
 
-    // Responsive
+    // Add responsive behavior
     chart.responsive.enabled = true;
     chart.responsive.rules.push({
       relevant: function (target) {
