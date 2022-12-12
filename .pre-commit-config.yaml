@@ -14,6 +14,8 @@ repos:
     rev: 21.8b0
     hooks:
       - id: black
+        # https://github.com/psf/black/issues/2964
+        additional_dependencies: ['click==8.0.4']
 
   - repo: https://github.com/timothycrosley/isort
     rev: 5.9.3
